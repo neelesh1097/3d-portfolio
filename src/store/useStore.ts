@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ACHIEVEMENTS, ZONES, PROJECTS, COLLECTIBLES } from '../data/portfolio';
+import { ACHIEVEMENTS_DATA, ZONES, DEVELOPER_TOKENS } from '../data/portfolio';
 import { Achievement, Project, ZoneId } from '../types';
 
 interface ControlsState {
@@ -12,68 +12,87 @@ interface ControlsState {
   handbrake: boolean;
 }
 
+export type QualityLevel = 'high' | 'medium' | 'low';
+
+export type ModalType =
+  | 'about'
+  | 'frontend'
+  | 'backend'
+  | 'database'
+  | 'devops'
+  | 'projects'
+  | 'experience'
+  | 'contact'
+  | 'map'
+  | 'achievements'
+  | null;
+
 interface AppStore {
-  // Loading & Onboarding
+  // Loading & View
   isLoading: boolean;
   loadingProgress: number;
   hasStarted: boolean;
   is2DView: boolean;
 
-  // Audio
+  // Audio & Quality & Dev Perf
   isSoundMuted: boolean;
+  qualityLevel: QualityLevel;
+  showPerfPanel: boolean;
 
-  // Car & Camera State
-  carPosition: [number, number, number];
-  carRotation: number;
+  // Car HUD State (throttled discrete values; continuous coords live in liveTelemetry.ts)
   carSpeed: number;
   isBoosting: boolean;
   shouldResetCar: boolean;
   teleportTarget: [number, number, number] | null;
   controls: ControlsState;
 
-  // World & Zones
+  // World & Navigation
   activeZone: ZoneId | null;
   approachedZone: ZoneId | null;
+  guidedZone: ZoneId | null;
   visitedZones: string[];
-  
-  // UI & Modals
-  activeModal: 'about' | 'skills' | 'projects' | 'experience' | 'education' | 'contact' | 'map' | 'achievements' | 'help' | null;
+
+  // Modals
+  activeModal: ModalType;
   selectedProject: Project | null;
   isMinimapOpen: boolean;
 
-  // Gamification: Achievements & Collectibles
+  // Gamification
   achievements: Achievement[];
   recentAchievement: Achievement | null;
-  collectibles: Record<string, boolean>;
+  collectedTokens: Record<string, boolean>;
   score: number;
 
-  // Setters & Actions
+  // Actions
   setLoadingProgress: (progress: number) => void;
   startExperience: () => void;
   toggleSound: () => void;
   toggle2DView: () => void;
-  setCarState: (pos: [number, number, number], rot: number, speed: number, boosting: boolean) => void;
+  setQualityLevel: (quality: QualityLevel) => void;
+  togglePerfPanel: () => void;
+  setHudTelemetry: (speed: number, boosting: boolean) => void;
   setControls: (controls: Partial<ControlsState>) => void;
   resetCar: () => void;
   clearResetCar: () => void;
   teleportTo: (pos: [number, number, number], zoneId?: ZoneId) => void;
   clearTeleport: () => void;
   setApproachedZone: (zoneId: ZoneId | null) => void;
-  setActiveModal: (modal: AppStore['activeModal']) => void;
+  setGuidedZone: (zoneId: ZoneId | null) => void;
+  setActiveModal: (modal: ModalType) => void;
   closeModal: () => void;
   openProjectModal: (project: Project) => void;
   toggleMinimap: () => void;
   unlockAchievement: (id: string) => void;
-  collectItem: (id: string) => void;
+  collectToken: (id: string) => void;
+  resetProgress: () => void;
 }
 
-// Load persisted achievements and collectibles safely
-const loadPersistedAchievements = (): Achievement[] => {
+const loadAchievements = (): Achievement[] => {
   try {
-    const saved = localStorage.getItem('neelesh_portfolio_achievements');
+    const saved = localStorage.getItem('fullstack_island_achievements');
     if (saved) {
       const parsed = JSON.parse(saved);
-      return ACHIEVEMENTS.map(a => ({
+      return ACHIEVEMENTS_DATA.map((a) => ({
         ...a,
         unlocked: parsed[a.id]?.unlocked ?? false,
         unlockedAt: parsed[a.id]?.unlockedAt,
@@ -82,17 +101,35 @@ const loadPersistedAchievements = (): Achievement[] => {
   } catch (e) {
     // ignore
   }
-  return ACHIEVEMENTS;
+  return ACHIEVEMENTS_DATA;
 };
 
-const loadPersistedCollectibles = (): Record<string, boolean> => {
+const loadTokens = (): Record<string, boolean> => {
   try {
-    const saved = localStorage.getItem('neelesh_portfolio_collectibles');
+    const saved = localStorage.getItem('fullstack_island_tokens');
     if (saved) return JSON.parse(saved);
   } catch (e) {
     // ignore
   }
   return {};
+};
+
+const detectInitialQuality = (): QualityLevel => {
+  if (typeof window === 'undefined') return 'high';
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+  const cores = navigator.hardwareConcurrency || 8;
+  if (cores <= 2) return 'low';
+  if (isMobile || cores <= 4) return 'medium';
+  return 'high';
+};
+
+const initialAchievements = loadAchievements();
+const initialTokens = loadTokens();
+
+const computeInitialScore = (achs: Achievement[], tokens: Record<string, boolean>): number => {
+  const achXp = achs.reduce((acc, a) => acc + (a.unlocked ? a.xp : 0), 0);
+  const tokenXp = DEVELOPER_TOKENS.reduce((acc, t) => acc + (tokens[t.id] ? t.points : 0), 0);
+  return achXp + tokenXp;
 };
 
 export const useStore = create<AppStore>((set, get) => ({
@@ -101,10 +138,10 @@ export const useStore = create<AppStore>((set, get) => ({
   hasStarted: false,
   is2DView: false,
 
-  isSoundMuted: true, // Default muted per user instructions
+  isSoundMuted: true,
+  qualityLevel: detectInitialQuality(),
+  showPerfPanel: Boolean(import.meta.env.DEV),
 
-  carPosition: [0, 0.5, 0],
-  carRotation: 0,
   carSpeed: 0,
   isBoosting: false,
   shouldResetCar: false,
@@ -121,16 +158,17 @@ export const useStore = create<AppStore>((set, get) => ({
 
   activeZone: 'spawn',
   approachedZone: null,
+  guidedZone: null,
   visitedZones: ['spawn'],
 
   activeModal: null,
   selectedProject: null,
   isMinimapOpen: false,
 
-  achievements: loadPersistedAchievements(),
+  achievements: initialAchievements,
   recentAchievement: null,
-  collectibles: loadPersistedCollectibles(),
-  score: 0,
+  collectedTokens: initialTokens,
+  score: computeInitialScore(initialAchievements, initialTokens),
 
   setLoadingProgress: (progress) => set({ loadingProgress: Math.min(100, Math.round(progress)) }),
 
@@ -140,16 +178,29 @@ export const useStore = create<AppStore>((set, get) => ({
 
   toggle2DView: () => set((state) => ({ is2DView: !state.is2DView })),
 
-  setCarState: (pos, rot, speed, boosting) => set({
-    carPosition: pos,
-    carRotation: rot,
-    carSpeed: speed,
-    isBoosting: boosting,
-  }),
+  setQualityLevel: (qualityLevel) => set({ qualityLevel }),
 
-  setControls: (newControls) => set((state) => ({
-    controls: { ...state.controls, ...newControls },
-  })),
+  togglePerfPanel: () => set((state) => ({ showPerfPanel: !state.showPerfPanel })),
+
+  setHudTelemetry: (speed, boosting) => {
+    const state = get();
+    if (state.carSpeed !== speed || state.isBoosting !== boosting) {
+      set({ carSpeed: speed, isBoosting: boosting });
+    }
+  },
+
+  setControls: (newControls) =>
+    set((state) => {
+      let changed = false;
+      for (const k of Object.keys(newControls) as Array<keyof ControlsState>) {
+        if (state.controls[k] !== newControls[k]) {
+          changed = true;
+          break;
+        }
+      }
+      if (!changed) return state;
+      return { controls: { ...state.controls, ...newControls } };
+    }),
 
   resetCar: () => set({ shouldResetCar: true }),
 
@@ -164,8 +215,8 @@ export const useStore = create<AppStore>((set, get) => ({
       visitedZones: newVisited,
     });
 
-    if (newVisited.length >= ZONES.length) {
-      get().unlockAchievement('world_traveler');
+    if (newVisited.length >= ZONES.length - 1) {
+      get().unlockAchievement('island_explorer');
     }
   },
 
@@ -174,19 +225,22 @@ export const useStore = create<AppStore>((set, get) => ({
   setApproachedZone: (zoneId) => {
     const current = get().approachedZone;
     if (current !== zoneId) {
-      set({ approachedZone: zoneId });
-      if (zoneId) {
+      const clearGuide = zoneId && get().guidedZone === zoneId ? { guidedZone: null } : {};
+      set({ approachedZone: zoneId, ...clearGuide });
+      if (zoneId && zoneId !== 'spawn') {
         const visited = get().visitedZones;
         if (!visited.includes(zoneId)) {
           const nextVisited = [...visited, zoneId];
           set({ visitedZones: nextVisited });
-          if (nextVisited.length >= ZONES.length) {
-            get().unlockAchievement('world_traveler');
+          if (nextVisited.length >= ZONES.length - 1) {
+            get().unlockAchievement('island_explorer');
           }
         }
       }
     }
   },
+
+  setGuidedZone: (guidedZone) => set({ guidedZone }),
 
   setActiveModal: (modal) => set({ activeModal: modal }),
 
@@ -194,7 +248,7 @@ export const useStore = create<AppStore>((set, get) => ({
 
   openProjectModal: (project) => {
     set({ selectedProject: project, activeModal: 'projects' });
-    get().unlockAchievement('project_curator');
+    get().unlockAchievement('project_collector');
   },
 
   toggleMinimap: () => set((state) => ({ isMinimapOpen: !state.isMinimapOpen })),
@@ -204,16 +258,17 @@ export const useStore = create<AppStore>((set, get) => ({
     const item = list.find((a) => a.id === id);
     if (!item || item.unlocked) return;
 
-    const updated = list.map((a) => (a.id === id ? { ...a, unlocked: true, unlockedAt: Date.now() } : a));
+    const updated = list.map((a) =>
+      a.id === id ? { ...a, unlocked: true, unlockedAt: Date.now() } : a
+    );
     const newlyUnlocked = updated.find((a) => a.id === id) || null;
 
-    // Persist
     try {
       const saveObj: Record<string, { unlocked: boolean; unlockedAt: number }> = {};
       updated.forEach((a) => {
         if (a.unlocked) saveObj[a.id] = { unlocked: true, unlockedAt: a.unlockedAt || Date.now() };
       });
-      localStorage.setItem('neelesh_portfolio_achievements', JSON.stringify(saveObj));
+      localStorage.setItem('fullstack_island_achievements', JSON.stringify(saveObj));
     } catch (e) {
       // ignore
     }
@@ -224,33 +279,46 @@ export const useStore = create<AppStore>((set, get) => ({
       score: state.score + (newlyUnlocked?.xp || 50),
     }));
 
-    // Auto clear toast after 4s
     setTimeout(() => {
       set((state) => (state.recentAchievement?.id === id ? { recentAchievement: null } : {}));
     }, 4500);
   },
 
-  collectItem: (id: string) => {
-    const items = get().collectibles;
+  collectToken: (id: string) => {
+    const items = get().collectedTokens;
     if (items[id]) return;
 
     const updated = { ...items, [id]: true };
     try {
-      localStorage.setItem('neelesh_portfolio_collectibles', JSON.stringify(updated));
+      localStorage.setItem('fullstack_island_tokens', JSON.stringify(updated));
     } catch (e) {
       // ignore
     }
 
-    const itemData = COLLECTIBLES.find((c) => c.id === id);
+    const tokenData = DEVELOPER_TOKENS.find((t) => t.id === id);
     set((state) => ({
-      collectibles: updated,
-      score: state.score + (itemData?.points || 100),
+      collectedTokens: updated,
+      score: state.score + (tokenData?.points || 100),
     }));
 
-    // If collected all
-    if (Object.keys(updated).length >= COLLECTIBLES.length) {
-      get().unlockAchievement('gem_collector');
+    if (Object.keys(updated).length >= DEVELOPER_TOKENS.length) {
+      get().unlockAchievement('token_hunter');
     }
   },
-}));
 
+  resetProgress: () => {
+    try {
+      localStorage.removeItem('fullstack_island_achievements');
+      localStorage.removeItem('fullstack_island_tokens');
+    } catch (e) {
+      // ignore
+    }
+    set({
+      achievements: ACHIEVEMENTS_DATA.map((a) => ({ ...a, unlocked: false, unlockedAt: undefined })),
+      collectedTokens: {},
+      visitedZones: ['spawn'],
+      recentAchievement: null,
+      score: 0,
+    });
+  },
+}));

@@ -1,98 +1,72 @@
-# Neelesh Yadav — Immersive 3D Interactive Developer Portfolio 🏎️✨
+# Full Stack Island — Neelesh Yadav 3D Interactive Portfolio
 
-An award-winning, game-inspired 3D developer portfolio website built with **React**, **Three.js**, **React Three Fiber (R3F)**, **Drei**, **TypeScript**, **Tailwind CSS**, and **Zustand**.
+An interactive 3D developer portfolio built with **React 19**, **TypeScript**, **Three.js**, **React Three Fiber**, **Drei**, **Framer Motion**, **Tailwind CSS v4**, and **Zustand**.
 
-Inspired by creative interactive experiences like [bruno-simon.com](https://bruno-simon.com/), this project lets visitors drive a responsive cyber roadster through a miniature futuristic open world to discover projects, skills, career history, achievements, and contact channels.
-
----
-
-## ⚡ Tech Stack
-
-- **Framework**: React 19 + Vite 6
-- **Language**: TypeScript
-- **3D Graphics & Engine**: Three.js, `@react-three/fiber`, `@react-three/drei`
-- **Animation & Physics**: Framer Motion, GSAP, and Custom Agile Arcade Vehicle Physics
-- **Audio**: Procedural Web Audio API sound synthesizer (engine revs, horn, nitro boost, jumps, fanfares)
-- **UI & Styling**: Tailwind CSS v4, Lucide React
-- **State Management**: Zustand (persisted local storage for achievements & collectibles)
+Explore **Full Stack Island** in a drivable miniature buggy across a sculpted coastal island connected by an asphalt ring road, crossroads, jump ramps, and eight architectural portfolio landmarks.
 
 ---
 
-## 🎮 Driving & Game Controls
+## Tech Stack
 
-### Desktop Controls:
+- **Frontend**: React 19, TypeScript, Vite 6, Tailwind CSS v4
+- **3D Engine**: Three.js, `@react-three/fiber`, `@react-three/drei`
+- **Motion & Icons**: Framer Motion, Lucide React, Canvas Confetti
+- **State & Audio**: Zustand (`localStorage` persistence for achievements & tokens), Web Audio API procedural sound engine
+- **Typography**: Space Grotesk, Inter, JetBrains Mono
+
+---
+
+## Driving & Navigation Controls
+
+### Desktop
 | Key | Action |
 | :--- | :--- |
-| **`W` / `↑`** | Accelerate forward |
-| **`S` / `↓`** | Reverse / Brake |
-| **`A` / `←`** | Steer Left |
-| **`D` / `→`** | Steer Right |
-| **`Shift`** | **Nitro Boost** (supersonic acceleration) |
-| **`Space`** | **Jump Stunt** (catch airtime over ramps) |
-| **`E` / `Enter`** | **Interact** / Open zone details & project modals |
-| **`R`** | **Respawn / Reset** car orientation |
-| **`H`** | **Honk** dual-tone air horn |
-| **`M`** | **Minimap GPS Radar** (click to teleport) |
-| **`Esc`** | Close active modal |
+| **`W A S D` / Arrows** | Drive and steer |
+| **`Shift`** | Nitro boost |
+| **`Space`** | Jump |
+| **`E` / `Enter`** | Interact / Open zone panel |
+| **`M`** | Open Island Navigation Map |
+| **`R`** | Reset vehicle to Central Hub |
+| **`H`** | Horn |
+| **`Scroll`** | Zoom third-person camera |
+| **`Esc`** | Close active modal or map |
+| **`P`** *(dev only)* | Toggle WebGL performance monitor |
 
-### Mobile & Touch Controls:
-- On-screen touch **D-Pad** for steering and forward/reverse driving.
-- Dedicated virtual buttons for **Boost**, **Jump**, **Respawn**, and **Zone Interaction**.
-
----
-
-## 🗺️ The 6 Interactive Portfolio Zones
-
-1. **🏁 Spawn Plaza (`[0, 0]`)**: Welcome pad, starting orientation, and controls briefing.
-2. **👤 About Studio (`[-38, -28]`)**: Architectural pavilion with holographic rotating monogram, personal story, and engineering philosophy.
-3. **⚡ Tech Lab (`[38, -28]`)**: Futuristic hexagonal laboratory with rotating tech data core, skill proficiency matrix, and modern developer tooling.
-4. **🚀 Project Arena (`[0, -56]`)**: Grand 3D exhibition gallery featuring 4 interactive podium stands with live modals, metric highlights, GitHub repositories, and confetti triggers.
-5. **🏢 Career Runway (`[42, 24]`)**: Milestone arches for **TRPW Strategic Partner**, **Univest**, and **Phoenix Labs**.
-6. **🎓 Academy Campus (`[-42, 24]`)**: Modern campus pavilion highlighting computer science coursework, degree honors, and algorithmic foundations.
-7. **📡 Comms Station (`[0, 52]`)**: Futuristic communications dish, validated contact transmission form, direct socials (GitHub, LinkedIn), and CV download.
+### Mobile
+- Touch **D-Pad** (accelerate, reverse, steer) + **Boost**, **Jump**, and **Reset** buttons.
+- Responsive navigation menu, compact speedometer, expandable minimap, and tap-to-open zone prompt.
 
 ---
 
-## 🏆 Gamification & Easter Eggs
+## Island Zones
 
-- **8 Glowing Energy Crystals**: Hidden across the terrain (Plaza, Stunt Ramps, Lab, Runway, Comms Station) rewarding XP and celebratory chimes.
-- **Physical Bowling Pins**: Knock them down with your car at high speed to trigger the *Bowling Legend* achievement.
-- **Stunt Jump Ramps**: Hit the ramps with Nitro Boost for airtime.
-- **8 Unlockable Achievements**: Saved locally in browser storage with animated toaster popups.
-- **Accessible 2D Fallback**: Immediate toggle to a clean, readable 2D classic portfolio for low-end hardware or text-first recruiters.
+1. **Central Hub (`[0, 0]`)**: Open roundabout plaza & spawn point.
+2. **About Me (`[-23, -23]`)**: Personal Studio HQ — bio, stats, story, and career interests.
+3. **Frontend City (`[0, -32]`)**: Glass tower — React, TypeScript, Next.js, Tailwind CSS, Three.js.
+4. **Backend Lab (`[23, -23]`)**: Server facility — Node.js, Express, REST APIs, WebSockets, Auth.
+5. **Database Hub (`[32, 0]`)**: Data center — PostgreSQL, MongoDB, MySQL, Redis, indexing.
+6. **Cloud & DevOps (`[23, 23]`)**: Sky infrastructure — Git, Docker, CI/CD, AWS, Vercel.
+7. **Project Plaza (`[0, 32]`)**: Exhibition hall & 4 showcase kiosks.
+8. **Experience Center (`[-23, 23]`)**: Academy rotunda — work timeline, education, and certifications.
+9. **Contact Station (`[-32, 0]`)**: Coastal comms tower — direct email, GitHub, LinkedIn, CV, and contact form.
 
 ---
 
-## 🚀 Running Locally
+## Editing Portfolio Content
+
+All portfolio data lives in `src/data/`:
+- `src/data/portfolio.ts` — personal info, stats, zone coordinates, achievements, collectible tokens
+- `src/data/projects.ts` — featured projects, descriptions, tech stacks, links
+- `src/data/skills.ts` — Frontend, Backend, Database, and Cloud & DevOps skill matrices
+- `src/data/experience.ts` — work history, education, coursework, certifications
+
+---
+
+## Development & Build
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Start Vite development server
-npm run dev
-
-# 3. Build for production
-npm run build
+npm run dev      # Starts Vite dev server on http://localhost:5173
+npx tsc --noEmit # TypeScript type check
+npm run build    # Production bundle in dist/
 ```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
----
-
-## 🌐 Deploying to Production (Render / Vercel / Netlify)
-
-Because this project is 100% client-side with zero external backend dependencies:
-
-1. **Push to your GitHub repository**:
-   ```bash
-   git add .
-   git commit -m "feat: complete immersive 3D developer portfolio"
-   git push -u origin main
-   ```
-2. **On Render ([dashboard.render.com](https://dashboard.render.com))**:
-   - Create a **New Static Site**.
-   - Connect your GitHub repo.
-   - **Build Command**: `npm run build`
-   - **Publish Directory**: `dist`
-3. Click **Deploy** — your live 3D portfolio will be online with an automated free SSL certificate!

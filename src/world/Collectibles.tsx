@@ -2,76 +2,72 @@ import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useStore } from '../store/useStore';
-import { COLLECTIBLES } from '../data/portfolio';
+import { liveCar } from '../store/liveTelemetry';
+import { DEVELOPER_TOKENS } from '../data/portfolio';
 import { soundManager } from '../utils/audio';
 import confetti from 'canvas-confetti';
 
-export const Collectibles: React.FC = () => {
-  const carPosition = useStore((state) => state.carPosition);
-  const collectibles = useStore((state) => state.collectibles);
-  const collectItem = useStore((state) => state.collectItem);
+const PICKUP_RADIUS_SQ = 2.5 * 2.5;
+
+export const Collectibles: React.FC = React.memo(() => {
+  const collectedTokens = useStore((state) => state.collectedTokens);
+  const collectToken = useStore((state) => state.collectToken);
 
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 
-    // Bobbing & rotating crystals
     const t = state.clock.elapsedTime;
-    groupRef.current.children.forEach((child, i) => {
-      child.rotation.y += delta * 1.5;
-      child.position.y = COLLECTIBLES[i].position[1] + Math.sin(t * 3 + i) * 0.25;
-    });
+    const children = groupRef.current.children;
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      child.rotation.y += delta * 1.6;
+      child.position.y = 1.2 + Math.sin(t * 3 + i) * 0.22;
+    }
 
-    // Check distance between car and uncollected crystals
-    const carPos = new THREE.Vector3(...carPosition);
-    COLLECTIBLES.forEach((c) => {
-      if (!collectibles[c.id]) {
-        const crystalPos = new THREE.Vector3(...c.position);
-        if (carPos.distanceTo(crystalPos) < 2.5) {
-          collectItem(c.id);
-          soundManager.playCollect();
-          confetti({
-            particleCount: 30,
-            spread: 50,
-            origin: { y: 0.6 },
-            colors: [c.color, '#ffffff', '#38bdf8'],
-          });
-        }
+    for (let i = 0; i < DEVELOPER_TOKENS.length; i++) {
+      const token = DEVELOPER_TOKENS[i];
+      if (collectedTokens[token.id]) continue;
+      const dx = liveCar.x - token.position[0];
+      const dz = liveCar.z - token.position[2];
+      if (dx * dx + dz * dz < PICKUP_RADIUS_SQ) {
+        collectToken(token.id);
+        soundManager.playCollect();
+        confetti({
+          particleCount: 24,
+          spread: 45,
+          origin: { y: 0.6 },
+          colors: [token.color, '#ffffff', '#38bdf8'],
+        });
       }
-    });
+    }
   });
 
   return (
     <group ref={groupRef}>
-      {COLLECTIBLES.map((c) => {
-        const isCollected = collectibles[c.id];
-        if (isCollected) return null;
+      {DEVELOPER_TOKENS.map((token) => {
+        if (collectedTokens[token.id]) return null;
 
         return (
-          <group key={c.id} position={c.position}>
-            {/* Glowing Octahedron Crystal */}
-            <mesh castShadow>
-              <octahedronGeometry args={[0.6, 0]} />
+          <group key={token.id} position={token.position}>
+            <mesh>
+              <octahedronGeometry args={[0.58, 0]} />
               <meshStandardMaterial
-                color={c.color}
-                emissive={c.color}
-                emissiveIntensity={0.8}
-                metalness={0.2}
-                roughness={0.1}
+                color={token.color}
+                emissive={token.color}
+                emissiveIntensity={0.65}
+                metalness={0.35}
+                roughness={0.2}
               />
             </mesh>
-            {/* Outer wireframe shell */}
-            <mesh scale={[1.3, 1.3, 1.3]}>
-              <octahedronGeometry args={[0.6, 0]} />
-              <meshBasicMaterial color={c.color} wireframe transparent opacity={0.6} />
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <torusGeometry args={[0.82, 0.055, 6, 18]} />
+              <meshBasicMaterial color={token.color} />
             </mesh>
-            {/* Radial glow light */}
-            <pointLight color={c.color} intensity={2.5} distance={5} />
           </group>
         );
       })}
     </group>
   );
-};
-
+});

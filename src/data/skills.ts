@@ -1,0 +1,70 @@
+import { SkillCategoryData } from '../types';
+
+export const SKILL_CATEGORIES_DATA: Record<string, SkillCategoryData> = {
+  frontend: {
+    id: 'frontend',
+    title: 'Frontend City',
+    description: 'Crafting pixel-perfect, high-performance user interfaces, creative WebGL worlds, and responsive designs.',
+    icon: 'Layout',
+    color: '#38bdf8',
+    skills: [
+      { name: 'HTML5 & Semantic Web', level: 98, experience: '3+ yrs' },
+      { name: 'CSS3 / Tailwind CSS', level: 96, experience: '3+ yrs' },
+      { name: 'JavaScript (ES6+)', level: 95, experience: '3+ yrs' },
+      { name: 'TypeScript', level: 92, experience: '2+ yrs' },
+      { name: 'React & React 19', level: 95, experience: '3+ yrs' },
+      { name: 'Next.js (App Router)', level: 90, experience: '2+ yrs' },
+      { name: 'Three.js / React Three Fiber', level: 88, experience: '1+ yr' },
+      { name: 'Responsive UI/UX Design', level: 94, experience: '3+ yrs' },
+    ],
+  },
+  backend: {
+    id: 'backend',
+    title: 'Backend Lab',
+    description: 'Architecting scalable, secure server infrastructures, real-time APIs, and distributed authentication workflows.',
+    icon: 'Server',
+    color: '#10b981',
+    skills: [
+      { name: 'Node.js Runtime', level: 92, experience: '2+ yrs' },
+      { name: 'Express.js & Fastify', level: 90, experience: '2+ yrs' },
+      { name: 'RESTful API Design', level: 95, experience: '3+ yrs' },
+      { name: 'WebSockets & Real-Time Streaming', level: 88, experience: '2+ yrs' },
+      { name: 'Auth (JWT, OAuth2, RBAC)', level: 90, experience: '2+ yrs' },
+      { name: 'Backend Architecture & Microservices', level: 85, experience: '2+ yrs' },
+      { name: 'Third-Party API Integrations', level: 92, experience: '2+ yrs' },
+    ],
+  },
+  database: {
+    id: 'database',
+    title: 'Database Hub',
+    description: 'Designing resilient data models, high-speed caching layers, and optimized query execution plans.',
+    icon: 'Database',
+    color: '#f59e0b',
+    skills: [
+      { name: 'PostgreSQL', level: 88, experience: '2+ yrs' },
+      { name: 'MongoDB & Mongoose', level: 90, experience: '2+ yrs' },
+      { name: 'MySQL', level: 85, experience: '2+ yrs' },
+      { name: 'Redis (Caching & Pub/Sub)', level: 86, experience: '1+ yr' },
+      { name: 'Database Schema Design', level: 90, experience: '2+ yrs' },
+      { name: 'Query Optimization & Indexing', level: 85, experience: '2+ yrs' },
+      { name: 'Data Modeling (SQL & NoSQL)', level: 88, experience: '2+ yrs' },
+    ],
+  },
+  devops: {
+    id: 'devops',
+    title: 'Cloud & DevOps Station',
+    description: 'Automating containerized deployments, CI/CD pipelines, and cloud infrastructure configuration.',
+    icon: 'Cloud',
+    color: '#8b5cf6',
+    skills: [
+      { name: 'Git & GitHub Workflows', level: 95, experience: '3+ yrs' },
+      { name: 'Docker & Containerization', level: 82, experience: '1+ yr' },
+      { name: 'CI/CD (GitHub Actions)', level: 85, experience: '2+ yrs' },
+      { name: 'AWS (EC2, S3, Lambda)', level: 78, experience: '1+ yr' },
+      { name: 'Vercel & Render Deployment', level: 95, experience: '3+ yrs' },
+      { name: 'Environment & Secrets Config', level: 90, experience: '2+ yrs' },
+      { name: 'Linux & Shell Scripting', level: 84, experience: '2+ yrs' },
+    ],
+  },
+};
+

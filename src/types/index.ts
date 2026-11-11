@@ -1,20 +1,41 @@
+export type ZoneId =
+  | 'spawn'
+  | 'about'
+  | 'frontend'
+  | 'backend'
+  | 'database'
+  | 'devops'
+  | 'projects'
+  | 'experience'
+  | 'contact';
+
+export interface ZoneInfo {
+  id: ZoneId;
+  name: string;
+  tagline: string;
+  position: [number, number, number];
+  radius: number;
+  color: string;
+  icon: string;
+}
+
 export interface Project {
   id: string;
   title: string;
   subtitle: string;
   description: string;
-  longDescription?: string;
-  tags: string[];
+  problemSolved: string;
+  role: string;
   features: string[];
+  tags: string[];
   metrics?: string;
   liveUrl?: string;
   githubUrl?: string;
-  image?: string;
   accentColor: string;
   coords: [number, number, number];
 }
 
-export interface Experience {
+export interface ExperienceItem {
   id: string;
   company: string;
   role: string;
@@ -26,7 +47,7 @@ export interface Experience {
   color: string;
 }
 
-export interface Education {
+export interface EducationItem {
   id: string;
   institution: string;
   degree: string;
@@ -38,15 +59,16 @@ export interface Education {
 
 export interface SkillItem {
   name: string;
-  level: number; // 1-100
-  iconName?: string;
+  level: number;
+  experience?: string;
 }
 
-export interface SkillCategory {
+export interface SkillCategoryData {
   id: string;
-  name: string;
-  icon: string;
+  title: string;
   description: string;
+  icon: string;
+  color: string;
   skills: SkillItem[];
 }
 
@@ -60,23 +82,10 @@ export interface Achievement {
   unlockedAt?: number;
 }
 
-export interface CollectibleItem {
+export interface DeveloperToken {
   id: string;
   name: string;
   position: [number, number, number];
   color: string;
   points: number;
 }
-
-export type ZoneId = 'spawn' | 'about' | 'skills' | 'projects' | 'experience' | 'education' | 'contact';
-
-export interface ZoneInfo {
-  id: ZoneId;
-  name: string;
-  tagline: string;
-  position: [number, number, number];
-  radius: number;
-  color: string;
-  icon: string;
-}
-

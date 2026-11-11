@@ -1,109 +1,180 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { EXPERIENCES } from '../../data/portfolio';
-import { X, Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
+import { EXPERIENCES_DATA, EDUCATION_DATA, CERTIFICATIONS_DATA } from '../../data/experience';
+import { CheckCircle2, GraduationCap, Award, Briefcase, BookOpen } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
+import { ModalShell } from '../ui/ModalShell';
 
 export const ExperienceModal: React.FC = () => {
   const { activeModal, closeModal } = useStore();
+  const [tab, setTab] = useState<'work' | 'education' | 'certs'>('work');
 
   if (activeModal !== 'experience') return null;
 
+  const edu = EDUCATION_DATA[0];
+
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-2xl bg-slate-900 border border-emerald-500/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]"
-        >
-          {/* Header */}
-          <div className="p-6 bg-gradient-to-r from-emerald-950/60 to-slate-900 border-b border-emerald-500/20 relative">
-            <button
-              onClick={() => {
-                closeModal();
-                soundManager.playClick();
-              }}
-              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="text-xs font-bold uppercase tracking-wider text-emerald-400">Career Runway</div>
-            <h2 className="text-2xl font-bold text-white">Work Experience & Milestones</h2>
-            <p className="text-xs text-emerald-200 mt-1">
-              Building scalable architectures, fintech micro-interactions, and high-performance full-stack web applications.
-            </p>
-          </div>
-
-          {/* Body Timeline */}
-          <div className="p-6 overflow-y-auto space-y-6">
-            {EXPERIENCES.map((exp, idx) => (
-              <div
-                key={exp.id}
-                className="relative pl-6 border-l-2 border-emerald-500/40 space-y-2 pb-4 last:pb-0"
+    <ModalShell
+      title="Career, Education & Certs"
+      eyebrow="Experience Center"
+      subtitle="Engineering milestones, software internships, computer science fundamentals, and certifications."
+      maxWidthClass="max-w-2xl"
+      onClose={closeModal}
+      subNav={
+        <div className="flex gap-1 py-2 overflow-x-auto">
+          {[
+            { id: 'work', label: 'Experience', icon: Briefcase },
+            { id: 'education', label: 'Education', icon: GraduationCap },
+            { id: 'certs', label: 'Certifications', icon: Award },
+          ].map((item) => {
+            const Icon = item.icon;
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  setTab(item.id as any);
+                  soundManager.playClick();
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 whitespace-nowrap transition-colors cursor-pointer ${
+                  active
+                    ? 'bg-[#1B3045] text-[#43D9F5] border border-[#43D9F5]/30'
+                    : 'text-[#9AAFC2] hover:text-[#F4F7FA] hover:bg-[#14263A]/60 border border-transparent'
+                }`}
               >
-                {/* Timeline Dot */}
-                <div
-                  className="absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-slate-900 shadow-md"
-                  style={{ backgroundColor: exp.color }}
-                />
-
-                <div className="flex flex-wrap items-center justify-between gap-1">
-                  <h3 className="font-bold text-white text-base">{exp.company}</h3>
-                  <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                <Icon className="w-3.5 h-3.5" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      }
+      footer={
+        <>
+          <span className="font-mono text-[11px] text-[#9AAFC2]">
+            {EXPERIENCES_DATA.length} Roles • {CERTIFICATIONS_DATA.length} Certifications
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              closeModal();
+              soundManager.playClick();
+            }}
+            className="px-4 py-2 rounded-lg bg-[#43D9F5] hover:bg-[#5ce1f8] text-[#0B1420] text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Resume Driving
+          </button>
+        </>
+      }
+    >
+      {tab === 'work' && (
+        <div className="space-y-5">
+          {EXPERIENCES_DATA.map((exp) => (
+            <div
+              key={exp.id}
+              className="relative pl-6 border-l border-[#43D9F5]/35 space-y-2 pb-2"
+            >
+              <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#43D9F5] ring-4 ring-[#0B1420]" />
+              <div className="p-4 rounded-xl bg-[#14263A]/55 border border-white/10 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="font-display font-bold text-[#F4F7FA] text-base">
+                      {exp.company}
+                    </h3>
+                    <div className="text-xs font-medium text-[#43D9F5] mt-0.5">
+                      {exp.role} <span className="text-[#9AAFC2]">• {exp.location}</span>
+                    </div>
+                  </div>
+                  <span className="font-mono text-[11px] text-[#F5B84B] bg-[#0B1420] border border-white/10 px-2.5 py-0.5 rounded-md">
                     {exp.period}
                   </span>
                 </div>
 
-                <div className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-                  <span>{exp.role}</span>
-                  <span className="text-slate-600">•</span>
-                  <span className="text-slate-400 font-normal">{exp.location}</span>
-                </div>
-
-                {/* Bullets */}
                 <ul className="space-y-1.5 pt-1">
                   {exp.description.map((desc, i) => (
-                    <li key={i} className="text-xs text-slate-300 flex items-start gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                    <li key={i} className="text-xs text-[#F4F7FA]/90 flex items-start gap-2 leading-relaxed">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#43D9F5] shrink-0 mt-0.5" />
                       <span>{desc}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5 pt-2">
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {exp.tech.map((t) => (
                     <span
                       key={t}
-                      className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-emerald-300 border border-slate-700/60"
+                      className="px-2 py-0.5 rounded bg-[#0B1420] border border-white/10 font-mono text-[10px] text-[#9AAFC2]"
                     >
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'education' && (
+        <div className="space-y-5 text-sm text-[#9AAFC2]">
+          <div className="p-4 rounded-xl bg-[#14263A] border border-white/10 flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-[#0B1420] border border-[#43D9F5]/40 flex items-center justify-center text-[#43D9F5] shrink-0">
+              <GraduationCap className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-[#F4F7FA] text-base">{edu.degree}</h3>
+              <div className="text-xs text-[#43D9F5] font-medium mt-0.5">{edu.institution}</div>
+              <div className="font-mono text-[11px] text-[#9AAFC2] mt-1">
+                {edu.period} • {edu.grade}
+              </div>
+            </div>
           </div>
 
-          {/* Footer */}
-          <div className="p-4 bg-slate-950/60 border-t border-slate-800 flex justify-end">
-            <button
-              onClick={() => {
-                closeModal();
-                soundManager.playClick();
-              }}
-              className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors cursor-pointer"
-            >
-              Resume Driving
-            </button>
+          <div>
+            <h4 className="font-display text-xs font-semibold uppercase tracking-wider text-[#43D9F5] mb-2.5 flex items-center gap-1.5">
+              <BookOpen className="w-4 h-4" /> Core Coursework
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {edu.coursework.map((course, i) => (
+                <div
+                  key={i}
+                  className="p-2.5 rounded-lg bg-[#14263A]/50 border border-white/10 text-xs text-[#F4F7FA]/90 flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#43D9F5] shrink-0" />
+                  <span>{course}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+        </div>
+      )}
+
+      {tab === 'certs' && (
+        <div className="space-y-3">
+          {CERTIFICATIONS_DATA.map((cert) => (
+            <div
+              key={cert.id}
+              className="p-4 rounded-xl bg-[#14263A]/60 border border-white/10 flex items-center justify-between gap-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#0B1420] border border-[#F5B84B]/35 flex items-center justify-center text-[#F5B84B] shrink-0">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="font-display font-semibold text-[#F4F7FA] text-sm">
+                    {cert.title}
+                  </div>
+                  <div className="text-xs text-[#9AAFC2]">{cert.issuer}</div>
+                </div>
+              </div>
+              <span className="font-mono text-xs text-[#F5B84B] bg-[#0B1420] border border-white/10 px-2.5 py-1 rounded-md shrink-0">
+                {cert.year}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </ModalShell>
   );
 };
-

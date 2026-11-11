@@ -1,9 +1,16 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../../store/useStore';
 import { PERSONAL_INFO } from '../../data/portfolio';
-import { X, MapPin, Sparkles, Code2, Briefcase, Award } from 'lucide-react';
+import { MapPin, Sparkles, Compass } from 'lucide-react';
 import { soundManager } from '../../utils/audio';
+import { ModalShell } from '../ui/ModalShell';
+
+const INTERESTS = [
+  'Interactive 3D & WebGL',
+  'Distributed Backend Systems',
+  'High-Throughput Caching',
+  'Developer Tooling & DX',
+];
 
 export const AboutModal: React.FC = () => {
   const { activeModal, closeModal } = useStore();
@@ -11,85 +18,87 @@ export const AboutModal: React.FC = () => {
   if (activeModal !== 'about') return null;
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-2xl bg-slate-900 border border-purple-500/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]"
-        >
-          {/* Header */}
-          <div className="p-6 bg-gradient-to-r from-purple-950/60 to-slate-900 border-b border-purple-500/20 relative">
-            <button
-              onClick={() => {
-                closeModal();
-                soundManager.playClick();
-              }}
-              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+    <ModalShell
+      title={PERSONAL_INFO.name}
+      eyebrow="About Me • Personal Studio"
+      subtitle={`${PERSONAL_INFO.role} • ${PERSONAL_INFO.location}`}
+      maxWidthClass="max-w-2xl"
+      onClose={closeModal}
+      headerLeftSlot={
+        /* Stylized Developer Profile Avatar */
+        <div className="w-14 h-14 rounded-xl bg-[#0B1420] border border-[#43D9F5]/40 flex items-center justify-center shrink-0 overflow-hidden">
+          <svg viewBox="0 0 64 64" className="w-full h-full" aria-label="Neelesh Yadav profile avatar">
+            <rect width="64" height="64" fill="#0B1420" />
+            <circle cx="32" cy="24" r="10" fill="#43D9F5" opacity="0.9" />
+            <path d="M14 54 C14 42, 50 42, 50 54 Z" fill="#1B3045" stroke="#43D9F5" strokeWidth="1.5" />
+            <circle cx="48" cy="16" r="4" fill="#F5B84B" />
+          </svg>
+        </div>
+      }
+      footer={
+        <>
+          <span className="flex items-center gap-1.5 text-xs text-[#9AAFC2]">
+            <MapPin className="w-3.5 h-3.5 text-[#43D9F5]" /> {PERSONAL_INFO.location}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              closeModal();
+              soundManager.playClick();
+            }}
+            className="px-4 py-2 rounded-lg bg-[#43D9F5] hover:bg-[#5ce1f8] text-[#0B1420] text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Resume Driving
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-6 text-sm text-[#9AAFC2]">
+        {/* Introduction Quote */}
+        <div className="p-4 rounded-xl bg-[#14263A] border border-white/10 text-[#F4F7FA] leading-relaxed">
+          {PERSONAL_INFO.bio}
+        </div>
+
+        {/* Key Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {PERSONAL_INFO.stats.map((stat, i) => (
+            <div
+              key={i}
+              className="p-3.5 rounded-xl bg-[#14263A]/60 border border-white/10 text-center"
             >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-500 p-0.5 shadow-lg shadow-purple-500/20">
-                <div className="w-full h-full bg-slate-950 rounded-2xl flex items-center justify-center text-xl font-bold font-mono text-purple-300">
-                  NY
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-purple-400">Personal Studio</div>
-                <h2 className="text-2xl font-bold text-white">{PERSONAL_INFO.name}</h2>
-                <p className="text-xs text-purple-200 mt-0.5 flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-purple-400" /> {PERSONAL_INFO.location}
-                </p>
-              </div>
+              <div className="font-mono text-lg font-bold text-[#43D9F5]">{stat.value}</div>
+              <div className="text-[11px] text-[#9AAFC2] mt-0.5">{stat.label}</div>
             </div>
+          ))}
+        </div>
+
+        {/* Background */}
+        <div>
+          <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-[#43D9F5] mb-2 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" /> Engineering Background
+          </h3>
+          <p className="whitespace-pre-line leading-relaxed text-[#F4F7FA]/90 text-sm">
+            {PERSONAL_INFO.story}
+          </p>
+        </div>
+
+        {/* Career Interests */}
+        <div>
+          <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-[#F5B84B] mb-2.5 flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5" /> Career Interests
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {INTERESTS.map((interest) => (
+              <span
+                key={interest}
+                className="px-3 py-1.5 rounded-lg bg-[#14263A] border border-white/10 text-xs text-[#F4F7FA] font-medium"
+              >
+                {interest}
+              </span>
+            ))}
           </div>
-
-          {/* Body */}
-          <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
-            {/* Tagline Box */}
-            <div className="p-4 rounded-xl bg-purple-950/30 border border-purple-500/20 text-purple-200 font-medium italic">
-              "{PERSONAL_INFO.tagline}"
-            </div>
-
-            {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {PERSONAL_INFO.stats.map((stat, i) => (
-                <div key={i} className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-center">
-                  <div className="text-lg font-bold text-purple-300 font-mono">{stat.value}</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Personal Story */}
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-2 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4" /> Personal Story & Philosophy
-              </h3>
-              <p className="whitespace-pre-line leading-relaxed text-slate-200">
-                {PERSONAL_INFO.story}
-              </p>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="p-4 bg-slate-950/60 border-t border-slate-800 flex justify-end">
-            <button
-              onClick={() => {
-                closeModal();
-                soundManager.playClick();
-              }}
-              className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-colors cursor-pointer"
-            >
-              Resume Driving
-            </button>
-          </div>
-        </motion.div>
+        </div>
       </div>
-    </AnimatePresence>
+    </ModalShell>
   );
 };
-
