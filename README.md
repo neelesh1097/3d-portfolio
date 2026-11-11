@@ -1,94 +1,98 @@
-# 🏎️ Neelesh Yadav — 3D Interactive Portfolio
+# Neelesh Yadav — Immersive 3D Interactive Developer Portfolio 🏎️✨
 
-An interactive, physics-driven 3D web portfolio inspired by Bruno Simon’s creative concept, built from scratch with **Three.js**, **Cannon-es**, and **Vite**.
+An award-winning, game-inspired 3D developer portfolio website built with **React**, **Three.js**, **React Three Fiber (R3F)**, **Drei**, **TypeScript**, **Tailwind CSS**, and **Zustand**.
 
-Visitors explore Neelesh's projects, experience, technical skills, and contact links by driving an agile RC sports car across a customized isometric diorama world.
-
----
-
-## 🌟 Highlights & Features
-
-- **🎮 4-Wheel Drive Vehicle Physics (`cannon-es`)**:
-  - Independent suspension, wheel friction, steering angles, and drifting physics.
-  - Dust particle trail & dynamic exhaust effects.
-  - Car recovery system: Press `[R]` or tap reset to flip the car upright.
-- **🏝️ Thematic World Zones**:
-  - **Spawn Plaza**: 3D nameplate & role title embedded on the diorama floor.
-  - **Projects Arcade**: Interactive kiosks for **Audit Management Tool (AMT)**, **Betel Meet**, **Full-Stack MERN Platform**, and **Crypto Price Tracker**. Driving close triggers high-tech hologram modals with project details & GitHub links.
-  - **Career Runway**: Architectural milestone arches for **TRPW Strategic Partner**, **Univest**, and **Phoenix Labs**.
-  - **Skills Playground**: Interactive physical bowling pins to smash into, obstacle jump ramps, and floating 3D tech badges.
-  - **Socials Island**: 3D physical monuments for GitHub, LinkedIn, and Email.
-- **🚀 Dual-Mode UX (Accessible for Everyone)**:
-  - **Gamer Mode**: Drive with `W A S D` / Arrow keys or on-screen mobile pedals.
-  - **Drone / Quick Nav Mode**: Top bar navigation jumps the camera smoothly to any zone for recruiters who prefer instant browsing.
-- **🔊 Zero-Dependency Audio Synthesis**:
-  - Built-in Web Audio API engine pitch modulation, impact collisions, horn (`H` key), and chimes—no external `.mp3` loading delays or CORS issues.
-- **📱 100% Responsive & Touch Supported**:
-  - Virtual steering controls & gas/brake pedals for mobile devices.
-- **🔒 Privacy Safe**:
-  - Personal contact info (phone number) is kept private; only professional links (GitHub, LinkedIn, Email) are surfaced.
+Inspired by creative interactive experiences like [bruno-simon.com](https://bruno-simon.com/), this project lets visitors drive a responsive cyber roadster through a miniature futuristic open world to discover projects, skills, career history, achievements, and contact channels.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Tech Stack
 
-- **Rendering**: [Three.js](https://threejs.org/) (WebGL)
-- **Physics**: [cannon-es](https://github.com/pmndrs/cannon-es)
-- **Tooling**: [Vite](https://vite.dev/)
-- **FX**: [canvas-confetti](https://www.npmjs.com/package/canvas-confetti)
-- **Hosting Target**: [Render](https://render.com/) (Static Site)
+- **Framework**: React 19 + Vite 6
+- **Language**: TypeScript
+- **3D Graphics & Engine**: Three.js, `@react-three/fiber`, `@react-three/drei`
+- **Animation & Physics**: Framer Motion, GSAP, and Custom Agile Arcade Vehicle Physics
+- **Audio**: Procedural Web Audio API sound synthesizer (engine revs, horn, nitro boost, jumps, fanfares)
+- **UI & Styling**: Tailwind CSS v4, Lucide React
+- **State Management**: Zustand (persisted local storage for achievements & collectibles)
+
+---
+
+## 🎮 Driving & Game Controls
+
+### Desktop Controls:
+| Key | Action |
+| :--- | :--- |
+| **`W` / `↑`** | Accelerate forward |
+| **`S` / `↓`** | Reverse / Brake |
+| **`A` / `←`** | Steer Left |
+| **`D` / `→`** | Steer Right |
+| **`Shift`** | **Nitro Boost** (supersonic acceleration) |
+| **`Space`** | **Jump Stunt** (catch airtime over ramps) |
+| **`E` / `Enter`** | **Interact** / Open zone details & project modals |
+| **`R`** | **Respawn / Reset** car orientation |
+| **`H`** | **Honk** dual-tone air horn |
+| **`M`** | **Minimap GPS Radar** (click to teleport) |
+| **`Esc`** | Close active modal |
+
+### Mobile & Touch Controls:
+- On-screen touch **D-Pad** for steering and forward/reverse driving.
+- Dedicated virtual buttons for **Boost**, **Jump**, **Respawn**, and **Zone Interaction**.
+
+---
+
+## 🗺️ The 6 Interactive Portfolio Zones
+
+1. **🏁 Spawn Plaza (`[0, 0]`)**: Welcome pad, starting orientation, and controls briefing.
+2. **👤 About Studio (`[-38, -28]`)**: Architectural pavilion with holographic rotating monogram, personal story, and engineering philosophy.
+3. **⚡ Tech Lab (`[38, -28]`)**: Futuristic hexagonal laboratory with rotating tech data core, skill proficiency matrix, and modern developer tooling.
+4. **🚀 Project Arena (`[0, -56]`)**: Grand 3D exhibition gallery featuring 4 interactive podium stands with live modals, metric highlights, GitHub repositories, and confetti triggers.
+5. **🏢 Career Runway (`[42, 24]`)**: Milestone arches for **TRPW Strategic Partner**, **Univest**, and **Phoenix Labs**.
+6. **🎓 Academy Campus (`[-42, 24]`)**: Modern campus pavilion highlighting computer science coursework, degree honors, and algorithmic foundations.
+7. **📡 Comms Station (`[0, 52]`)**: Futuristic communications dish, validated contact transmission form, direct socials (GitHub, LinkedIn), and CV download.
+
+---
+
+## 🏆 Gamification & Easter Eggs
+
+- **8 Glowing Energy Crystals**: Hidden across the terrain (Plaza, Stunt Ramps, Lab, Runway, Comms Station) rewarding XP and celebratory chimes.
+- **Physical Bowling Pins**: Knock them down with your car at high speed to trigger the *Bowling Legend* achievement.
+- **Stunt Jump Ramps**: Hit the ramps with Nitro Boost for airtime.
+- **8 Unlockable Achievements**: Saved locally in browser storage with animated toaster popups.
+- **Accessible 2D Fallback**: Immediate toggle to a clean, readable 2D classic portfolio for low-end hardware or text-first recruiters.
 
 ---
 
 ## 🚀 Running Locally
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/neelesh1097/<repo-name>.git
-   cd neelesh-3d-portfolio
-   ```
+```bash
+# 1. Install dependencies
+npm install
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+# 2. Start Vite development server
+npm run dev
 
-3. **Start the local development server**:
-   ```bash
-   npm run dev
-   ```
+# 3. Build for production
+npm run build
+```
 
-4. **Build for production**:
-   ```bash
-   npm run build
-   ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🌐 How to Deploy on Render (Step-by-Step)
+## 🌐 Deploying to Production (Render / Vercel / Netlify)
 
-Render can host this as a **Static Site** for free with automated SSL and global CDN:
+Because this project is 100% client-side with zero external backend dependencies:
 
-1. **Push your code to GitHub**:
+1. **Push to your GitHub repository**:
    ```bash
-   git init
    git add .
-   git commit -m "Initial commit: 3D interactive portfolio"
-   git branch -M main
-   git remote add origin https://github.com/neelesh1097/<YOUR_NEW_REPO_NAME>.git
+   git commit -m "feat: complete immersive 3D developer portfolio"
    git push -u origin main
    ```
-
-2. **Log into Render**:
-   - Go to [dashboard.render.com](https://dashboard.render.com/)
-   - Click **New +** -> **Static Site**
-   - Connect your GitHub account and select your repository.
-
-3. **Configure the deployment settings**:
-   - **Name**: `neelesh-portfolio` (or your preferred name)
-   - **Branch**: `main`
+2. **On Render ([dashboard.render.com](https://dashboard.render.com))**:
+   - Create a **New Static Site**.
+   - Connect your GitHub repo.
    - **Build Command**: `npm run build`
    - **Publish Directory**: `dist`
-
-4. **Click "Create Static Site"**:
-   - Render will automatically run `npm run build` and deploy your site to `https://neelesh-portfolio.onrender.com`!
+3. Click **Deploy** — your live 3D portfolio will be online with an automated free SSL certificate!
