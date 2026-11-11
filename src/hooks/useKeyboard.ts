@@ -126,3 +126,4 @@ export const useKeyboard = () => {
     };
   }, [setControls, resetCar, approachedZone, activeModal, setActiveModal, closeModal, toggleMinimap, unlockAchievement]);
 };
+

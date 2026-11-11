@@ -74,3 +74,4 @@ export const Collectibles: React.FC = () => {
     </group>
   );
 };
+

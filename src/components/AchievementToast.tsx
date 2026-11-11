@@ -37,3 +37,4 @@ export const AchievementToast: React.FC = () => {
     </AnimatePresence>
   );
 };
+

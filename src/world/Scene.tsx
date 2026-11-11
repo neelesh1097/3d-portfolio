@@ -10,10 +10,13 @@ export const Scene: React.FC = () => {
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 14, 18], fov: 48, near: 0.1, far: 250 }}
+      camera={{ position: [0, 16, 22], fov: 45, near: 0.1, far: 350 }}
       className="w-full h-full outline-none"
       gl={{ antialias: true, powerPreference: 'high-performance' }}
     >
+      {/* Sunny Sky Gradient Background */}
+      <color attach="background" args={['#67e8f9']} />
+      
       <Suspense fallback={null}>
         <Environment />
         <Zones />

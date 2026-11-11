@@ -94,3 +94,4 @@ export const AchievementsModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+

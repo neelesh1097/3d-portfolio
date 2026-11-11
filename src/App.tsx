@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   useKeyboard();
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#090d16] font-sans select-none">
+    <div className="relative w-screen h-screen overflow-hidden bg-[#67e8f9] font-sans select-none">
       {/* 3D WebGL Canvas */}
       <Scene />
 
@@ -53,3 +53,4 @@ export const App: React.FC = () => {
 };
 
 export default App;
+

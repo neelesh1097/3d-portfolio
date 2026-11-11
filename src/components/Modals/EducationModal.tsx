@@ -103,3 +103,4 @@ export const EducationModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+

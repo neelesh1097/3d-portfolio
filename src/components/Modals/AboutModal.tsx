@@ -92,3 +92,4 @@ export const AboutModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+

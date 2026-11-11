@@ -79,3 +79,4 @@ export interface ZoneInfo {
   color: string;
   icon: string;
 }
+

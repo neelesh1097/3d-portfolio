@@ -9,7 +9,6 @@ import {
   RotateCcw,
   Sparkles,
   Monitor,
-  Eye,
   Keyboard,
   ChevronDown,
   ChevronUp,
@@ -29,7 +28,6 @@ export const MainUI: React.FC = () => {
     carSpeed,
     isBoosting,
     achievements,
-    score,
     toggle2DView,
   } = useStore();
 
@@ -44,18 +42,18 @@ export const MainUI: React.FC = () => {
          ======================================================== */}
       <header className="pointer-events-auto flex items-center justify-between gap-3 w-full">
         {/* Left: Brand Identity */}
-        <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-black text-xs font-mono text-white">
+        <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg shadow-sky-950/5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-500 to-amber-500 flex items-center justify-center font-black text-xs font-mono text-white shadow-sm">
             NY
           </div>
           <div className="hidden sm:block">
-            <div className="text-xs font-bold text-white tracking-wide">Neelesh Yadav</div>
-            <div className="text-[10px] text-sky-400 font-medium">Full-Stack & AI</div>
+            <div className="text-xs font-extrabold text-slate-900 tracking-tight">Neelesh Yadav</div>
+            <div className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Creative Engineer</div>
           </div>
         </div>
 
         {/* Center: Zone Teleport Pills (Desktop & Tablet) */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg">
+        <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg shadow-sky-950/5">
           {ZONES.map((zone) => {
             const isCurrent = activeZone === zone.id;
             return (
@@ -65,10 +63,10 @@ export const MainUI: React.FC = () => {
                   teleportTo(zone.position, zone.id);
                   soundManager.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   isCurrent
-                    ? 'bg-sky-500 text-slate-950 shadow-md font-bold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    ? 'bg-slate-900 text-white shadow-md'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 <span>{zone.name}</span>
@@ -78,7 +76,7 @@ export const MainUI: React.FC = () => {
         </nav>
 
         {/* Right: Quick Action Controls */}
-        <div className="flex items-center gap-2 p-1 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg shadow-sky-950/5">
           {/* Audio Toggle */}
           <button
             onClick={() => {
@@ -87,7 +85,7 @@ export const MainUI: React.FC = () => {
             }}
             title={isSoundMuted ? 'Unmute Sound' : 'Mute Sound'}
             className={`p-2 rounded-xl transition-colors cursor-pointer ${
-              !isSoundMuted ? 'text-sky-400 bg-sky-950/60 border border-sky-500/30' : 'text-slate-400 hover:text-slate-200'
+              !isSoundMuted ? 'text-amber-600 bg-amber-50 border border-amber-200' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             {!isSoundMuted ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -100,7 +98,7 @@ export const MainUI: React.FC = () => {
               soundManager.playClick();
             }}
             title="Open GPS Radar [M]"
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <Compass className="w-4 h-4" />
           </button>
@@ -112,7 +110,7 @@ export const MainUI: React.FC = () => {
               soundManager.playClick();
             }}
             title="View Achievements"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-amber-400 hover:bg-amber-950/40 border border-transparent hover:border-amber-500/30 transition-all cursor-pointer text-xs font-bold font-mono"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-amber-600 hover:bg-amber-50 border border-amber-200/60 transition-all cursor-pointer text-xs font-bold font-mono"
           >
             <Trophy className="w-4 h-4" />
             <span>{unlockedCount}/{achievements.length}</span>
@@ -125,7 +123,7 @@ export const MainUI: React.FC = () => {
               soundManager.playClick();
             }}
             title="Respawn / Reset Car [R]"
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -137,7 +135,7 @@ export const MainUI: React.FC = () => {
               soundManager.playClick();
             }}
             title="Switch to 2D Portfolio View"
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <Monitor className="w-4 h-4" />
           </button>
@@ -154,16 +152,16 @@ export const MainUI: React.FC = () => {
               setActiveModal(approachedZone as any);
               soundManager.playClick();
             }}
-            className="cursor-pointer px-6 py-3 rounded-2xl backdrop-blur-xl bg-slate-900/90 border-2 border-sky-400/80 text-white shadow-2xl shadow-sky-500/30 flex items-center gap-3 animate-pulse hover:scale-105 transition-all"
+            className="cursor-pointer px-6 py-3 rounded-2xl backdrop-blur-xl bg-white/95 border-2 border-slate-900 text-slate-900 shadow-2xl flex items-center gap-3 animate-pulse hover:scale-105 transition-all"
           >
-            <Sparkles className="w-5 h-5 text-sky-400" />
+            <Sparkles className="w-5 h-5 text-amber-500" />
             <div>
-              <div className="text-[11px] font-bold text-sky-300 uppercase tracking-wider">
+              <div className="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">
                 Approaching Zone
               </div>
               <div className="text-sm font-extrabold flex items-center gap-1.5">
                 <span>Inspect {approachedZone.toUpperCase()}</span>
-                <span className="text-xs text-slate-400 font-mono">[Press E]</span>
+                <span className="text-xs text-slate-500 font-mono">[Press E]</span>
               </div>
             </div>
           </div>
@@ -175,23 +173,23 @@ export const MainUI: React.FC = () => {
          ======================================================== */}
       <footer className="pointer-events-auto flex items-end justify-between w-full">
         {/* Speedometer Card */}
-        <div className="p-3 sm:p-4 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-xl flex items-center gap-3.5">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-xl flex items-center gap-3.5">
           <div className="text-right">
-            <div className="text-2xl sm:text-3xl font-black font-mono text-white leading-none">
+            <div className="text-2xl sm:text-3xl font-black font-mono text-slate-900 leading-none">
               {carSpeed}
             </div>
-            <div className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">KM/H</div>
+            <div className="text-[10px] font-extrabold uppercase text-slate-500 tracking-wider">KM/H</div>
           </div>
 
           {/* Nitro Indicator */}
-          <div className="flex flex-col gap-1 border-l border-slate-800 pl-3">
-            <div className="text-[9px] font-extrabold uppercase tracking-widest text-sky-400">NITRO</div>
-            <div className="w-16 h-2 rounded-full bg-slate-800 overflow-hidden border border-slate-700/60">
+          <div className="flex flex-col gap-1 border-l border-slate-200 pl-3">
+            <div className="text-[9px] font-extrabold uppercase tracking-widest text-red-500">NITRO</div>
+            <div className="w-16 h-2.5 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
               <div
                 className={`h-full transition-all duration-150 ${
                   isBoosting
-                    ? 'w-full bg-gradient-to-r from-cyan-400 to-sky-500 shadow-md shadow-sky-400'
-                    : 'w-1/2 bg-sky-600'
+                    ? 'w-full bg-gradient-to-r from-red-500 to-amber-500 shadow-md shadow-red-400'
+                    : 'w-1/2 bg-red-400'
                 }`}
               />
             </div>
@@ -200,14 +198,14 @@ export const MainUI: React.FC = () => {
 
         {/* Desktop Keyboard Controls Overlay */}
         <div className="hidden lg:flex flex-col items-end">
-          <div className="p-3 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-xl text-xs text-slate-300">
-            <div className="flex items-center justify-between gap-4 mb-2 border-b border-slate-800 pb-1.5">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
-                <Keyboard className="w-3.5 h-3.5" /> Driving Controls
+          <div className="p-3 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-xl text-xs text-slate-700">
+            <div className="flex items-center justify-between gap-4 mb-2 border-b border-slate-200 pb-1.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                <Keyboard className="w-3.5 h-3.5 text-amber-500" /> Driving Controls
               </span>
               <button
                 onClick={() => setShowControls(!showControls)}
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="text-slate-400 hover:text-slate-900 cursor-pointer"
               >
                 {showControls ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
               </button>
@@ -216,28 +214,28 @@ export const MainUI: React.FC = () => {
             {showControls && (
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[11px]">
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">W A S D</kbd>
-                  <span className="text-slate-400">Steer</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">W A S D</kbd>
+                  <span className="text-slate-500">Steer</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">Shift</kbd>
-                  <span className="text-slate-400">Nitro Boost</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">Shift</kbd>
+                  <span className="text-slate-500">Nitro Boost</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">Space</kbd>
-                  <span className="text-slate-400">Jump Stunt</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">Space</kbd>
+                  <span className="text-slate-500">Jump Stunt</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">E / Enter</kbd>
-                  <span className="text-slate-400">Interact</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">E / Enter</kbd>
+                  <span className="text-slate-500">Interact</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">R</kbd>
-                  <span className="text-slate-400">Respawn</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">R</kbd>
+                  <span className="text-slate-500">Respawn</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200 font-mono">H</kbd>
-                  <span className="text-slate-400">Honk Horn</span>
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-slate-800 font-mono">H</kbd>
+                  <span className="text-slate-500">Honk Horn</span>
                 </div>
               </div>
             )}

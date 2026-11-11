@@ -303,3 +303,4 @@ class SoundSystem {
 }
 
 export const soundManager = new SoundSystem();
+

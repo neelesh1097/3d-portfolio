@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
 
 I love taking complex computational challenges—whether that is real-time physics in the browser or optimized database query plans—and turning them into effortless, delightful user experiences.`,
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-  location: 'Bangalore, India (Open to Worldwide Remote)',
+  location: 'Gurgaon, India (Open to Worldwide Remote)',
   email: 'neelesh1097.dev@gmail.com',
   github: 'https://github.com/neelesh1097',
   linkedin: 'https://linkedin.com/in/neelesh-yadav-a5988b292',

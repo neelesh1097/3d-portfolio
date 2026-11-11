@@ -96,3 +96,4 @@ export const InteractivePins: React.FC = () => {
     </group>
   );
 };
+

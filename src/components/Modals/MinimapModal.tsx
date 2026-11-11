@@ -119,3 +119,4 @@ export const MinimapModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+

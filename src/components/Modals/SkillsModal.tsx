@@ -111,3 +111,4 @@ export const SkillsModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+
