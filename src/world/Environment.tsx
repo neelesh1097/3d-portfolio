@@ -140,6 +140,81 @@ const TelephonePole: React.FC<{ position: [number, number, number]; rotationY?: 
   );
 };
 
+// Cute Cartoon Whale / Sea Creature swimming in the ocean (like in Image 1!)
+const CartoonWhale: React.FC = () => {
+  const ref = useRef<THREE.Group>(null);
+  useFrame((state) => {
+    if (!ref.current) return;
+    const t = state.clock.elapsedTime * 0.35;
+    const radius = 86;
+    ref.current.position.x = Math.cos(t) * radius;
+    ref.current.position.z = Math.sin(t) * radius;
+    ref.current.position.y = -0.4 + Math.sin(t * 4) * 0.25;
+    ref.current.rotation.y = -t + Math.PI / 2;
+  });
+  return (
+    <group ref={ref}>
+      {/* Whale Blue Body */}
+      <mesh castShadow>
+        <sphereGeometry args={[2.4, 16, 16]} />
+        <meshStandardMaterial color="#0284c7" roughness={0.3} />
+      </mesh>
+      {/* White Belly */}
+      <mesh position={[0, -0.6, 0]}>
+        <sphereGeometry args={[1.9, 16, 16]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.3} />
+      </mesh>
+      {/* Yellow pectoral fins (like Image 1!) */}
+      <mesh position={[-1.8, 0, 0]} rotation={[0, 0, -0.4]}>
+        <coneGeometry args={[0.6, 1.4, 8]} />
+        <meshStandardMaterial color="#facc15" />
+      </mesh>
+      <mesh position={[1.8, 0, 0]} rotation={[0, 0, 0.4]}>
+        <coneGeometry args={[0.6, 1.4, 8]} />
+        <meshStandardMaterial color="#facc15" />
+      </mesh>
+      {/* Fluke Tail */}
+      <mesh position={[0, 0.4, -2.5]} rotation={[0.4, 0, 0]}>
+        <boxGeometry args={[2.2, 0.2, 0.8]} />
+        <meshStandardMaterial color="#0284c7" />
+      </mesh>
+      {/* Cute eyes */}
+      <mesh position={[-0.9, 0.5, 1.4]}>
+        <sphereGeometry args={[0.25, 8, 8]} />
+        <meshBasicMaterial color="#0f172a" />
+      </mesh>
+      <mesh position={[0.9, 0.5, 1.4]}>
+        <sphereGeometry args={[0.25, 8, 8]} />
+        <meshBasicMaterial color="#0f172a" />
+      </mesh>
+    </group>
+  );
+};
+
+// Speed Boost Chevron Pad on the asphalt road
+const SpeedBoostPad: React.FC<{ position: [number, number, number]; rotationY?: number }> = ({
+  position,
+  rotationY = 0,
+}) => {
+  return (
+    <group position={position} rotation={[0, rotationY, 0]}>
+      {/* Pad Base */}
+      <mesh position={[0, 0.18, 0]} receiveShadow>
+        <boxGeometry args={[3.6, 0.04, 3.2]} />
+        <meshStandardMaterial color="#0f172a" roughness={0.8} />
+      </mesh>
+      {/* Neon Yellow/Orange Chevrons */}
+      {[-0.7, 0, 0.7].map((z, i) => (
+        <mesh key={`chev-${i}`} position={[0, 0.21, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <coneGeometry args={[0.55, 0.75, 3]} />
+          <meshBasicMaterial color="#f59e0b" />
+        </mesh>
+      ))}
+      <pointLight position={[0, 0.5, 0]} intensity={1.5} distance={4} color="#f59e0b" />
+    </group>
+  );
+};
+
 // Stunt Jump Ramp
 const JumpRamp: React.FC<{ position: [number, number, number]; rotationY?: number }> = ({
   position,
@@ -262,6 +337,9 @@ export const Environment: React.FC = () => {
         <ringGeometry args={[95, 98, 48]} />
         <meshBasicMaterial color="#e0f2fe" transparent opacity={0.35} />
       </mesh>
+
+      {/* Cute Swimming Cartoon Whale (from Image 1!) */}
+      <CartoonWhale />
 
       {/* ========================================================
           2. MINIATURE DIORAMA ISLAND (Terracotta Cliffs + Lush Grass)
@@ -392,11 +470,15 @@ export const Environment: React.FC = () => {
       ))}
 
       {/* ========================================================
-          5. STUNT JUMP RAMPS
+          5. STUNT JUMP RAMPS & SPEED BOOST PADS
          ======================================================== */}
       <JumpRamp position={[14, 0.1, 0]} rotationY={Math.PI / 2} />
       <JumpRamp position={[-14, 0.1, 0]} rotationY={-Math.PI / 2} />
       <JumpRamp position={[0, 0.1, -15]} rotationY={Math.PI} />
+
+      <SpeedBoostPad position={[0, 0.1, -8]} rotationY={Math.PI} />
+      <SpeedBoostPad position={[8, 0.1, 0]} rotationY={Math.PI / 2} />
+      <SpeedBoostPad position={[-8, 0.1, 0]} rotationY={-Math.PI / 2} />
 
       {/* ========================================================
           6. VEGETATION: CARTOON TREES & CONICAL PINES

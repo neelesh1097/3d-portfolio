@@ -109,6 +109,20 @@ export const Vehicle: React.FC = () => {
       p.speed *= 0.91;
     }
 
+    // Interactive Road Speed Boost Pads
+    const boostPads = [
+      [0, -8],
+      [8, 0],
+      [-8, 0],
+    ];
+    boostPads.forEach(([bx, bz]) => {
+      const d = Math.hypot(p.position.x - bx, p.position.z - bz);
+      if (d < 1.8 && Math.abs(p.speed) > 0.05) {
+        p.speed = Math.min(p.speed * 1.25, CONFIG.maxSpeed * CONFIG.boostMultiplier);
+        soundManager.playBoost();
+      }
+    });
+
     // Steering
     const effectiveSpeed = Math.abs(p.speed);
     if (effectiveSpeed > 0.01) {
