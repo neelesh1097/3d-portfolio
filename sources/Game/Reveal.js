@@ -50,6 +50,37 @@ export class Reveal
         // Step 0
         if(step === 0)
         {
+            let started = false
+            let intersect = null
+            const next = () =>
+            {
+                if(started) return
+                started = true
+                window.removeEventListener('pointerdown', onScreenTouch)
+                window.removeEventListener('keydown', onAnyKey)
+                this.updateStep(1)
+                this.game.inputs.events.off('introStart', inputCallback)
+                if(intersect) this.game.rayCursor.removeIntersect(intersect)
+            }
+
+            const inputCallback = () => next()
+
+            const onScreenTouch = (e) =>
+            {
+                if(e.target && e.target.closest && (e.target.closest('.menu-trigger') || e.target.closest('.map-trigger') || e.target.closest('.menu')))
+                    return
+                next()
+            }
+            const onAnyKey = (e) =>
+            {
+                // Ignore function keys / reload
+                if(e.key && e.key.startsWith('F') && e.key.length > 1) return
+                next()
+            }
+
+            window.addEventListener('pointerdown', onScreenTouch)
+            window.addEventListener('keydown', onAnyKey)
+
             // Intro loader => Hide circle
             this.game.world.intro.circle.hide(() =>
             {
@@ -99,42 +130,15 @@ export class Reveal
                 // Click
                 if(location.hash.match(/skip/i))
                 {
-                    this.updateStep(1)
+                    next()
                 }
                 else
                 {
-                    // Next function
-                    let started = false
-                    const next = () =>
-                    {
-                        if(started) return
-                        started = true
-                        window.removeEventListener('pointerdown', onScreenTouch)
-                        this.updateStep(1)
-                        this.game.inputs.events.off('introStart', inputCallback)
-                        this.game.rayCursor.removeIntersect(intersect)
-                    }
-
-                    // Input callback
-                    const inputCallback = () =>
-                    {
-                        next()
-                    }
-
-                    // Tap anywhere on screen to start (mobile friendly)
-                    const onScreenTouch = (e) =>
-                    {
-                        if(e.target && e.target.closest && (e.target.closest('.menu-trigger') || e.target.closest('.map-trigger') || e.target.closest('.menu')))
-                            return
-                        next()
-                    }
-                    window.addEventListener('pointerdown', onScreenTouch, { once: true })
-
                     // Intsect
                     const position = this.position.clone()
                     position.y = 0
                     
-                    const intersect = this.game.rayCursor.addIntersect({
+                    intersect = this.game.rayCursor.addIntersect({
                         active: true,
                         shape: new THREE.Sphere(position, 3.5),
                         onClick: next,
@@ -153,8 +157,6 @@ export class Reveal
                         { name: 'introStart', categories: [ 'intro' ], keys: [ 'Gamepad.cross', 'Keyboard.Enter', 'Keyboard.ArrowUp', 'Keyboard.ArrowDown', 'Keyboard.KeyW', 'Keyboard.KeyD' ] },
                     ])
 
-            // { name: 'forward',               categories: [ 'wandering', 'racing', 'cinematic' ], keys: [ 'Keyboard.ArrowUp', 'Keyboard.KeyW', 'Gamepad.up', 'Gamepad.r2' ] },
-            // { name: 'right',                 categories: [ 'wandering', 'racing', 'cinematic' ], keys: [ 'Keyboard.ArrowRight', 'Keyboard.KeyD', 'Gamepad.right' ] },
                     this.game.inputs.events.on('introStart', inputCallback)
                 }
             })

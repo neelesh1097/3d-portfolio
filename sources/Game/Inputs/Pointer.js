@@ -28,8 +28,11 @@ export class Pointer
             distanceDelta: 0
         }
 
+        this.lastTouchTime = 0
+
         this.element.addEventListener('mousemove', (_event) =>
         {
+            if(Date.now() - this.lastTouchTime < 1000) return
             _event.preventDefault()
 
             this.mode = Pointer.MODE_MOUSE
@@ -40,6 +43,7 @@ export class Pointer
 
         this.element.addEventListener('mousedown', (_event) =>
         {
+            if(Date.now() - this.lastTouchTime < 1000) return
             _event.preventDefault()
 
             this.mode = Pointer.MODE_MOUSE
@@ -62,7 +66,7 @@ export class Pointer
         this.element.addEventListener('touchmove', (_event) =>
         {
             // _event.preventDefault()
-
+            this.lastTouchTime = Date.now()
             this.mode = Pointer.MODE_TOUCH
             this.upcomingTouches = [ ..._event.touches ]
             
@@ -85,7 +89,7 @@ export class Pointer
         this.element.addEventListener('touchstart', (_event) =>
         {
             // _event.preventDefault()
-
+            this.lastTouchTime = Date.now()
             this.mode = Pointer.MODE_TOUCH
             this.upcomingDown = true
             this.upcomingTouches = [ ..._event.touches ]

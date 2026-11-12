@@ -459,7 +459,10 @@ export class PhysicsVehicle
         // Engine force
         const topSpeed = lerp(this.topSpeed, this.topSpeedBoost, this.game.player.boosting)
         const overflowSpeed = Math.max(0, this.speed - topSpeed)
-        let engineForce = (this.game.player.accelerating * (1 + this.game.player.boosting * this.boostMultiplier)) * this.engineForceAmplitude / (1 + overflowSpeed) * this.game.ticker.deltaScaled
+        const dtScaled = Math.max(0.0001, this.game.ticker.deltaScaled || 0.016)
+        let engineForce = (this.game.player.accelerating * (1 + this.game.player.boosting * this.boostMultiplier)) * this.engineForceAmplitude / (1 + overflowSpeed) * dtScaled
+        if(Number.isNaN(engineForce) || !Number.isFinite(engineForce))
+            engineForce = 0
 
         // Brake
         let brake = this.game.player.braking
@@ -479,7 +482,9 @@ export class PhysicsVehicle
             engineForce = 0
         }
 
-        brake *= this.brakeAmplitude * this.game.ticker.deltaScaled
+        brake *= this.brakeAmplitude * dtScaled
+        if(Number.isNaN(brake) || !Number.isFinite(brake))
+            brake = 0
 
         // Steer
         const steer = this.game.player.steering * this.steeringAmplitude
@@ -508,7 +513,7 @@ export class PhysicsVehicle
         }
 
         // Update controller
-        const delta = this.game.quality.level === 1 ? 1/60 : Math.min(1/60, this.game.ticker.deltaAverage)
+        const delta = this.game.quality.level === 1 ? 1/60 : Math.min(1/60, this.game.ticker.deltaAverage || 1/60)
         this.controller.updateVehicle(delta)
     }
 
@@ -517,16 +522,27 @@ export class PhysicsVehicle
         // Various measures
         const newPosition = new THREE.Vector3().copy(this.chassis.physical.body.translation())
         this.velocity = newPosition.clone().sub(this.position)
-        this.direction = this.velocity.clone().normalize()
         this.position.copy(newPosition)
         this.quaternion.copy(this.chassis.physical.body.rotation())
         this.sideward.set(0, 0, 1).applyQuaternion(this.quaternion)
         this.upward.set(0, 1, 0).applyQuaternion(this.quaternion)
         this.forward.set(1, 0, 0).applyQuaternion(this.quaternion)
-        // this.speed = this.controller.currentVehicleSpeed()
-        this.speed = this.velocity.length() / this.game.ticker.deltaScaled
-        this.xzSpeed = Math.hypot(this.velocity.x, this.velocity.z) / this.game.ticker.deltaScaled
-        this.forwardRatio = this.direction.dot(this.forward)
+        
+        const dt = Math.max(0.0001, this.game.ticker.deltaScaled || 0.016)
+        this.speed = this.velocity.length() / dt
+        this.xzSpeed = Math.hypot(this.velocity.x, this.velocity.z) / dt
+        
+        if(this.velocity.lengthSq() > 0.0001)
+        {
+            this.direction = this.velocity.clone().normalize()
+            this.forwardRatio = this.direction.dot(this.forward)
+        }
+        else
+        {
+            this.direction.copy(this.forward)
+            this.forwardRatio = 1
+        }
+        
         this.goingForward = this.forwardRatio > 0.5
         this.forwardSpeed = this.speed * this.forwardRatio
 

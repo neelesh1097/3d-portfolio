@@ -281,13 +281,22 @@ export class Physics
         // Doesn't work
         this.eventQueue.drainContactForceEvents(event =>
         {
+            const h1 = event.collider1()
+            const h2 = event.collider2()
+            if(h1 === null || h1 === undefined || h2 === null || h2 === undefined)
+                return
+
             // Retrieve colliders
-            const collider1 = this.world.getCollider(event.collider1())
-            const collider2 = this.world.getCollider(event.collider2())
+            const collider1 = this.world.getCollider(h1)
+            const collider2 = this.world.getCollider(h2)
+            if(!collider1 || !collider2)
+                return
 
             // Retrieve bodies
             const body1 = collider1.parent()
             const body2 = collider2.parent()
+            if(!body1 || !body2)
+                return
 
             // Retrieve callbacks
             const callback1 = body1.userData?.object?.physical?.onCollision

@@ -29,7 +29,8 @@ export class Ticker
     update(elapsed)
     {
         const elapsedSeconds = elapsed / 1000
-        this.delta = Math.min(elapsedSeconds - this.elapsed, this.maxDelta)
+        const rawDelta = elapsedSeconds - this.elapsed
+        this.delta = Math.max(1 / 120, Math.min(rawDelta > 0 ? rawDelta : 1 / 60, this.maxDelta))
         this.elapsed = elapsedSeconds
         this.deltaScaled = this.delta * this.scale
         this.elapsedScaled += this.deltaScaled
