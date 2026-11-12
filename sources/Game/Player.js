@@ -330,16 +330,21 @@ export class Player
     {
         this.distanceDriven = {}
 
-        const localDistanceDriven = localStorage.getItem('distanceDriven')
+        let localDistanceDriven = null
+        try {
+            localDistanceDriven = localStorage.getItem('distanceDriven')
+        } catch(e) {}
+
         this.distanceDriven.value = localDistanceDriven ? parseInt(localDistanceDriven) : 0
         this.distanceDriven.floored = Math.floor(this.distanceDriven.value)
         this.distanceDriven.reset = () =>
         {
-            localStorage.removeItem('distanceDriven')
+            try {
+                localStorage.removeItem('distanceDriven')
+            } catch(e) {}
             this.distanceDriven.value = 0
             this.distanceDriven.floored = 0
         }
-        
     }
 
     setUnstuck()
@@ -454,7 +459,11 @@ export class Player
 
     setTimePlayed()
     {
-        const localTimePlayed = localStorage.getItem('timePlayed')
+        let localTimePlayed = null
+        try {
+            localTimePlayed = localStorage.getItem('timePlayed')
+        } catch(e) {}
+
         this.timePlayed = {}
         this.timePlayed.all = localTimePlayed ? parseFloat(localTimePlayed) : 0
         this.timePlayed.session = 0
@@ -462,7 +471,9 @@ export class Player
 
         setInterval(() =>
         {
-            localStorage.setItem('timePlayed', this.timePlayed.all)
+            try {
+                localStorage.setItem('timePlayed', this.timePlayed.all)
+            } catch(e) {}
         }, 1000)
     }
 
@@ -661,7 +672,9 @@ export class Player
 
         if(flooredDistanceDriven !== this.distanceDriven.floored)
         {
-            localStorage.setItem('distanceDriven', flooredDistanceDriven)
+            try {
+                localStorage.setItem('distanceDriven', flooredDistanceDriven)
+            } catch(e) {}
             this.distanceDriven.floored = flooredDistanceDriven
         }
         

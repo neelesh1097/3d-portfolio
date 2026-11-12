@@ -464,11 +464,13 @@ export class VisualVehicle
             }
 
             // Ground tracks
-            visualWheel.groundTrack.update(physicalWheel.contactPoint, physicalWheel.inContact)
+            if(visualWheel.groundTrack)
+                visualWheel.groundTrack.update(physicalWheel.contactPoint, physicalWheel.inContact)
         }
 
         // Main ground track
-        this.mainGroundTrack.update(physicalVehicle.position, physicalVehicle.position.y < 1.5)
+        if(this.mainGroundTrack)
+            this.mainGroundTrack.update(physicalVehicle.position, physicalVehicle.position.y < 1.5)
 
         // Antenna
         if(this.antenna)

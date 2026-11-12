@@ -8,17 +8,19 @@ const getRotationMatrix = Fn(([u, v]) =>
     const axis = cross(u, v)
     const sinTheta = axis.length()
 
-    axis.assign(axis.normalize())
+    const normalizedAxis = sinTheta.greaterThan(0.0001).select(axis.div(sinTheta), vec3(0, 1, 0))
 
     const c = cosTheta
     const s = sinTheta
     const t = c.oneMinus()
 
-    return mat3(
-        t.mul(axis.x).mul(axis.x).add(c), t.mul(axis.x).mul(axis.y).sub(s.mul(axis.z)), t.mul(axis.x).mul(axis.z).add(s.mul(axis.y)),
-        t.mul(axis.x).mul(axis.y).add(s.mul(axis.z)), t.mul(axis.y).mul(axis.y).add(c), t.mul(axis.y).mul(axis.z).sub(s.mul(axis.x)),
-        t.mul(axis.x).mul(axis.z).sub(s.mul(axis.y)), t.mul(axis.y).mul(axis.z).add(s.mul(axis.x)), t.mul(axis.z).mul(axis.z).add(c)
-    );
+    const rotMat = mat3(
+        t.mul(normalizedAxis.x).mul(normalizedAxis.x).add(c), t.mul(normalizedAxis.x).mul(normalizedAxis.y).sub(s.mul(normalizedAxis.z)), t.mul(normalizedAxis.x).mul(normalizedAxis.z).add(s.mul(normalizedAxis.y)),
+        t.mul(normalizedAxis.x).mul(normalizedAxis.y).add(s.mul(normalizedAxis.z)), t.mul(normalizedAxis.y).mul(normalizedAxis.y).add(c), t.mul(normalizedAxis.y).mul(normalizedAxis.z).sub(s.mul(normalizedAxis.x)),
+        t.mul(normalizedAxis.x).mul(normalizedAxis.z).sub(s.mul(normalizedAxis.y)), t.mul(normalizedAxis.y).mul(normalizedAxis.z).add(s.mul(normalizedAxis.x)), t.mul(normalizedAxis.z).mul(normalizedAxis.z).add(c)
+    )
+
+    return sinTheta.greaterThan(0.0001).select(rotMat, mat3(1, 0, 0, 0, 1, 0, 0, 0, 1))
 })
 
 export class Trails
@@ -99,7 +101,9 @@ export class Trails
 
             // Direction
             const nextPosition = texture(item.dataTexture, vec2(ratio.add(this.texel), 0.5)).xyz
-            const direction = nextPosition.sub(trailPosition).normalize()
+            const diff = nextPosition.sub(trailPosition)
+            const len = diff.length()
+            const direction = len.greaterThan(0.0001).select(diff.div(len), vec3(0, 0, -1))
 
             // Rotation matrix
             const rotationMatrix = getRotationMatrix(direction, vec3(0, 0, -1))
@@ -143,6 +147,9 @@ export class Trails
     {
         for(const item of this.items)
         {
+            if(!item.position || Number.isNaN(item.position.x) || Number.isNaN(item.position.y) || Number.isNaN(item.position.z))
+                continue
+
             const data = item.dataTexture.source.data.data
 
             // Throttle by distance
@@ -152,7 +159,7 @@ export class Trails
             if(distance > this.distanceThrottle)
             {
                 // Move data one "pixel"
-                for(let i = this.subdivisions - 1; i >= 0; i--)
+                for(let i = this.subdivisions - 1; i > 0; i--)
                 {
                     const i4 = i * 4
                     data[i4    ] = data[i4 - 4]

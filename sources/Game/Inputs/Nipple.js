@@ -164,17 +164,20 @@ export class Nipple
 
                     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), - this.position.y)
                     const intersect = new THREE.Vector3()
-                    this.raycaster.ray.intersectPlane(plane, intersect)
+                    const hit = this.raycaster.ray.intersectPlane(plane, intersect)
 
-                    // Distance
-                    const distance = this.position.distanceTo(intersect)
+                    if(hit)
+                    {
+                        // Distance
+                        const distance = this.position.distanceTo(intersect)
 
-                    // Target angle
-                    this.targetAngle = Math.atan2(intersect.z - this.position.z, intersect.x - this.position.x)
+                        // Target angle
+                        this.targetAngle = Math.atan2(intersect.z - this.position.z, intersect.x - this.position.x)
 
-                    // Progress
-                    this.progress = clamp((distance - this.progressRadiusLow) / (this.progressRadiusHigh - this.progressRadiusLow), 0, 1)
-                    this.uniforms.progress.value = this.progress
+                        // Progress
+                        this.progress = clamp((distance - this.progressRadiusLow) / (this.progressRadiusHigh - this.progressRadiusLow), 0, 1)
+                        this.uniforms.progress.value = this.progress
+                    }
 
                     // Tap
                     if(action.trigger === 'start')
@@ -234,6 +237,8 @@ export class Nipple
         {
             // Smallest angle and forward
             this.smallestAngle = smallestAngle(this.angle, this.targetAngle)
+            if(Number.isNaN(this.smallestAngle))
+                this.smallestAngle = 0
             let smallestAngleAbs = Math.abs(this.smallestAngle)
 
             this.forward = smallestAngleAbs < this.forwardAmplitude / 2

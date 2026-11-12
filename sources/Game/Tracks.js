@@ -213,6 +213,13 @@ export class Track
     {
         const data = this.dataTexture.source.data.data
 
+        if(!_position || Number.isNaN(_position.x) || Number.isNaN(_position.y) || Number.isNaN(_position.z))
+        {
+            data[3] = 0
+            this.dataTexture.needsUpdate = true
+            return
+        }
+
         // Throttle by time
         const lastTimeDelta = this.game.ticker.elapsed - this.lastTime
         if(lastTimeDelta > this.timeThrottle)
@@ -224,7 +231,7 @@ export class Track
             if(distance > this.distanceThrottle)
             {
                 // Move data one "pixel"
-                for(let i = this.subdivisions - 1; i >= 0; i--)
+                for(let i = this.subdivisions - 1; i > 0; i--)
                 {
                     const i4 = i * 4
                     data[i4    ] = data[i4 - 4]
