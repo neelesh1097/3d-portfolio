@@ -50,37 +50,6 @@ export class Reveal
         // Step 0
         if(step === 0)
         {
-            let started = false
-            let intersect = null
-            const next = () =>
-            {
-                if(started) return
-                started = true
-                window.removeEventListener('pointerdown', onScreenTouch)
-                window.removeEventListener('keydown', onAnyKey)
-                this.updateStep(1)
-                this.game.inputs.events.off('introStart', inputCallback)
-                if(intersect) this.game.rayCursor.removeIntersect(intersect)
-            }
-
-            const inputCallback = () => next()
-
-            const onScreenTouch = (e) =>
-            {
-                if(e.target && e.target.closest && (e.target.closest('.menu-trigger') || e.target.closest('.map-trigger') || e.target.closest('.menu')))
-                    return
-                next()
-            }
-            const onAnyKey = (e) =>
-            {
-                // Ignore function keys / reload
-                if(e.key && e.key.startsWith('F') && e.key.length > 1) return
-                next()
-            }
-
-            window.addEventListener('pointerdown', onScreenTouch)
-            window.addEventListener('keydown', onAnyKey)
-
             // Intro loader => Hide circle
             this.game.world.intro.circle.hide(() =>
             {
@@ -130,15 +99,44 @@ export class Reveal
                 // Click
                 if(location.hash.match(/skip/i))
                 {
-                    next()
+                    this.updateStep(1)
                 }
                 else
                 {
+                    let started = false
+                    const next = () =>
+                    {
+                        if(started) return
+                        started = true
+                        window.removeEventListener('pointerdown', onScreenTouch)
+                        window.removeEventListener('keydown', onAnyKey)
+                        this.updateStep(1)
+                        this.game.inputs.events.off('introStart', inputCallback)
+                        if(intersect) this.game.rayCursor.removeIntersect(intersect)
+                    }
+
+                    const inputCallback = () => next()
+
+                    const onScreenTouch = (e) =>
+                    {
+                        if(e.target && e.target.closest && (e.target.closest('.menu-trigger') || e.target.closest('.map-trigger') || e.target.closest('.menu')))
+                            return
+                        next()
+                    }
+                    const onAnyKey = (e) =>
+                    {
+                        if(e.key && e.key.startsWith('F') && e.key.length > 1) return
+                        next()
+                    }
+
+                    window.addEventListener('pointerdown', onScreenTouch, { once: true })
+                    window.addEventListener('keydown', onAnyKey, { once: true })
+
                     // Intsect
                     const position = this.position.clone()
                     position.y = 0
                     
-                    intersect = this.game.rayCursor.addIntersect({
+                    const intersect = this.game.rayCursor.addIntersect({
                         active: true,
                         shape: new THREE.Sphere(position, 3.5),
                         onClick: next,
