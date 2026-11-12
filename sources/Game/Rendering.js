@@ -37,13 +37,53 @@ export class Rendering
 
     async setRenderer()
     {
-        const hasWebGPU = typeof navigator !== 'undefined' && 'gpu' in navigator && !!navigator.gpu
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+        const hasWebGPU = !isMobile && typeof navigator !== 'undefined' && 'gpu' in navigator && !!navigator.gpu
         this.renderer = new THREE.WebGPURenderer({
             canvas: this.game.canvasElement,
             powerPreference: 'high-performance',
             forceWebGL: !hasWebGPU,
             antialias: this.game.viewport.pixelRatio < 2
         })
+
+        // Guard against any WebGPU IDL parameter errors on mobile/desktop
+        if(this.renderer.backend && typeof this.renderer.backend._draw === 'function')
+        {
+            const origDraw = this.renderer.backend._draw.bind(this.renderer.backend)
+            this.renderer.backend._draw = function(renderObject, info, renderContextData, pipelineGPU, bindings, vertexBuffers, drawParams, passEncoderGPU, currentSets, cameraIndexSlot = -1)
+            {
+                if(!drawParams)
+                    return
+
+                const toUint = (val, defaultVal = 0) =>
+                {
+                    if(typeof val !== 'number' || Number.isNaN(val) || !Number.isFinite(val) || val < 0)
+                        return defaultVal
+                    return Math.floor(val)
+                }
+
+                const count = toUint(drawParams.vertexCount, 0)
+                const instanceCount = toUint(drawParams.instanceCount, 1)
+                const first = toUint(drawParams.firstVertex, 0)
+
+                if(count === 0 || instanceCount === 0)
+                    return
+
+                drawParams.vertexCount = count
+                drawParams.instanceCount = instanceCount
+                drawParams.firstVertex = first
+
+                try
+                {
+                    return origDraw(renderObject, info, renderContextData, pipelineGPU, bindings, vertexBuffers, drawParams, passEncoderGPU, currentSets, cameraIndexSlot)
+                }
+                catch(err)
+                {
+                    console.warn('[WebGPU] Draw skipped on object:', renderObject?.object?.name || renderObject?.object?.type, err)
+                }
+            }
+        }
+
         this.renderer.setSize(this.game.viewport.width, this.game.viewport.height)
         this.renderer.setPixelRatio(this.game.viewport.pixelRatio)
         this.renderer.sortObjects = false
