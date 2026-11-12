@@ -37,10 +37,11 @@ export class Rendering
 
     async setRenderer()
     {
+        const hasWebGPU = typeof navigator !== 'undefined' && 'gpu' in navigator && !!navigator.gpu
         this.renderer = new THREE.WebGPURenderer({
             canvas: this.game.canvasElement,
             powerPreference: 'high-performance',
-            forceWebGL: false,
+            forceWebGL: !hasWebGPU,
             antialias: this.game.viewport.pixelRatio < 2
         })
         this.renderer.setSize(this.game.viewport.width, this.game.viewport.height)
@@ -79,7 +80,6 @@ export class Rendering
         const scenePassColor = scenePass.getTextureNode('output')
 
         this.bloomPass = bloom(scenePassColor)
-        this.bloomPass._nMips = this.game.quality.level === 0 ? 5 : 2
         this.bloomPass.threshold.value = 1
         this.bloomPass.strength.value = 0.25
         this.bloomPass.smoothWidth.value = 1
@@ -95,7 +95,7 @@ export class Rendering
             }
             else if(level === 1)
             {
-                this.postProcessing.outputNode = scenePassColor.add(this.bloomPass)
+                this.postProcessing.outputNode = scenePassColor
             }
 
             this.postProcessing.needsUpdate = true

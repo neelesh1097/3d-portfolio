@@ -104,8 +104,12 @@ export class Reveal
                 else
                 {
                     // Next function
+                    let started = false
                     const next = () =>
                     {
+                        if(started) return
+                        started = true
+                        window.removeEventListener('pointerdown', onScreenTouch)
                         this.updateStep(1)
                         this.game.inputs.events.off('introStart', inputCallback)
                         this.game.rayCursor.removeIntersect(intersect)
@@ -116,6 +120,15 @@ export class Reveal
                     {
                         next()
                     }
+
+                    // Tap anywhere on screen to start (mobile friendly)
+                    const onScreenTouch = (e) =>
+                    {
+                        if(e.target && e.target.closest && (e.target.closest('.menu-trigger') || e.target.closest('.map-trigger') || e.target.closest('.menu')))
+                            return
+                        next()
+                    }
+                    window.addEventListener('pointerdown', onScreenTouch, { once: true })
 
                     // Intsect
                     const position = this.position.clone()
