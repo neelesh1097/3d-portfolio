@@ -1,0 +1,57 @@
+import type * as THREE from 'three/webgpu';
+import type RAPIER_NS from '@dimforge/rapier3d';
+import type { Ticker } from './Ticker';
+import type { Viewport } from './Viewport';
+import type { Quality } from './Quality';
+import type { Inputs } from './Inputs/Inputs';
+import type { Rendering } from './Rendering';
+import type { Noises } from './Noises';
+import type { DayCycles } from './DayCycles';
+import type { Wind } from './Wind';
+import type { Water } from './Water';
+import type { Fog } from './Fog';
+import type { Lighting } from './Lighting';
+import type { Reveal } from './Reveal';
+import type { Terrain } from './Terrain';
+import type { Tracks } from './Tracks';
+import type { Materials } from './Materials';
+import type { Physics } from './Physics/Physics';
+import type { Objects } from './Objects';
+import type { PhysicsVehicle } from './Physics/PhysicsVehicle';
+import type { Player } from './Player';
+import type { View } from './View';
+import type { Zones } from './Zones';
+import type { Respawns } from './Respawns';
+import type { InteractivePoints } from './InteractivePoints';
+import type { World } from './World/World';
+
+export interface GameContext {
+  scene: THREE.Scene;
+  RAPIER: typeof RAPIER_NS;
+  resources: Record<string, any>;
+  ticker: Ticker;
+  viewport: Viewport;
+  quality: Quality;
+  inputs: Inputs;
+  rendering: Rendering;
+  noises: Noises;
+  dayCycles: DayCycles;
+  wind: Wind;
+  water: Water;
+  fog: Fog;
+  lighting: Lighting;
+  reveal: Reveal;
+  terrain: Terrain;
+  tracks: Tracks;
+  materials: Materials;
+  physics: Physics;
+  objects: Objects;
+  respawns: Respawns;
+  physicalVehicle: PhysicsVehicle;
+  player: Player;
+  view: View;
+  zones: Zones;
+  interactivePoints: InteractivePoints;
+  world: World;
+}
+

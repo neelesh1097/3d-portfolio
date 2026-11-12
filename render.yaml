@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: neelesh-3d-portfolio
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: VITE_COMPRESSED
+        value: "1"
+      - key: VITE_GAME_PUBLIC
+        value: "1"
+      - key: VITE_PLAYER_SPAWN
+        value: landing
+

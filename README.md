@@ -1,72 +1,88 @@
-# Full Stack Island — Neelesh Yadav 3D Interactive Portfolio
+# Neelesh Yadav — 3D Interactive Portfolio
 
-An interactive 3D developer portfolio built with **React 19**, **TypeScript**, **Three.js**, **React Three Fiber**, **Drei**, **Framer Motion**, **Tailwind CSS v4**, and **Zustand**.
-
-Explore **Full Stack Island** in a drivable miniature buggy across a sculpted coastal island connected by an asphalt ring road, crossroads, jump ramps, and eight architectural portfolio landmarks.
+An interactive, game-like 3D developer portfolio powered by **Three.js**, **Rapier physics (WASM)**, and **Vite**, built on the **Bruno Simon Folio 2025** engine architecture.
 
 ---
 
-## Tech Stack
+## Tech Stack & Architecture
 
-- **Frontend**: React 19, TypeScript, Vite 6, Tailwind CSS v4
-- **3D Engine**: Three.js, `@react-three/fiber`, `@react-three/drei`
-- **Motion & Icons**: Framer Motion, Lucide React, Canvas Confetti
-- **State & Audio**: Zustand (`localStorage` persistence for achievements & tokens), Web Audio API procedural sound engine
-- **Typography**: Space Grotesk, Inter, JetBrains Mono
-
----
-
-## Driving & Navigation Controls
-
-### Desktop
-| Key | Action |
-| :--- | :--- |
-| **`W A S D` / Arrows** | Drive and steer |
-| **`Shift`** | Nitro boost |
-| **`Space`** | Jump |
-| **`E` / `Enter`** | Interact / Open zone panel |
-| **`M`** | Open Island Navigation Map |
-| **`R`** | Reset vehicle to Central Hub |
-| **`H`** | Horn |
-| **`Scroll`** | Zoom third-person camera |
-| **`Esc`** | Close active modal or map |
-| **`P`** *(dev only)* | Toggle WebGL performance monitor |
-
-### Mobile
-- Touch **D-Pad** (accelerate, reverse, steer) + **Boost**, **Jump**, and **Reset** buttons.
-- Responsive navigation menu, compact speedometer, expandable minimap, and tap-to-open zone prompt.
+- **3D Graphics**: Three.js (WebGPU/WebGL) with custom shaders, shadow maps, and post-processing
+- **Physics**: `@dimforge/rapier3d` (WebAssembly raycast vehicle controller & rigid-body collision simulation)
+- **Audio**: Web Audio API with procedural sound effects & environmental audio
+- **Styling & UI**: Stylus stylesheets with responsive overlay HUD, touch controls, and interactive modal dialogs
+- **Bundler & Tooling**: Vite with Draco and Basis Universal KTX2 texture decompression
 
 ---
 
-## Island Zones
+## Getting Started
 
-1. **Central Hub (`[0, 0]`)**: Open roundabout plaza & spawn point.
-2. **About Me (`[-23, -23]`)**: Personal Studio HQ — bio, stats, story, and career interests.
-3. **Frontend City (`[0, -32]`)**: Glass tower — React, TypeScript, Next.js, Tailwind CSS, Three.js.
-4. **Backend Lab (`[23, -23]`)**: Server facility — Node.js, Express, REST APIs, WebSockets, Auth.
-5. **Database Hub (`[32, 0]`)**: Data center — PostgreSQL, MongoDB, MySQL, Redis, indexing.
-6. **Cloud & DevOps (`[23, 23]`)**: Sky infrastructure — Git, Docker, CI/CD, AWS, Vercel.
-7. **Project Plaza (`[0, 32]`)**: Exhibition hall & 4 showcase kiosks.
-8. **Experience Center (`[-23, 23]`)**: Academy rotunda — work timeline, education, and certifications.
-9. **Contact Station (`[-32, 0]`)**: Coastal comms tower — direct email, GitHub, LinkedIn, CV, and contact form.
+### Prerequisites
 
----
+- **Node.js**: >= 20.0.0
+- **npm**: >= 10.0.0
 
-## Editing Portfolio Content
-
-All portfolio data lives in `src/data/`:
-- `src/data/portfolio.ts` — personal info, stats, zone coordinates, achievements, collectible tokens
-- `src/data/projects.ts` — featured projects, descriptions, tech stacks, links
-- `src/data/skills.ts` — Frontend, Backend, Database, and Cloud & DevOps skill matrices
-- `src/data/experience.ts` — work history, education, coursework, certifications
-
----
-
-## Development & Build
+### Installation
 
 ```bash
 npm install
-npm run dev      # Starts Vite dev server on http://localhost:5173
-npx tsc --noEmit # TypeScript type check
-npm run build    # Production bundle in dist/
 ```
+
+### Development Server
+
+```bash
+npm run dev
+```
+
+Opens the local development server (typically `http://localhost:5173/`).
+
+### Production Build
+
+```bash
+npm run build
+```
+
+Generates production-optimized assets in the `dist/` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+---
+
+## Controls
+
+### Desktop
+- **Drive / Steer**: `W`, `A`, `S`, `D` or `Arrow Keys`
+- **Nitro Boost**: `Shift`
+- **Jump / Hop**: `Space`
+- **Interact / Open Panel**: `E` or `Enter`
+- **Map Overview**: `M`
+- **Horn**: `H`
+- **Reset Vehicle**: `R`
+
+### Mobile / Touch
+- Responsive on-screen joystick / pedal controls and touch action buttons (`Interact`, `Unstuck`, `Next`, `Close`).
+
+---
+
+## Deployment (Render)
+
+This project is pre-configured with a [`render.yaml`](./render.yaml) blueprint for 1-click deployment on [Render](https://render.com).
+
+### Manual Configuration
+- **Type**: Static Site
+- **Build Command**: `npm install && npm run build`
+- **Publish Directory**: `dist`
+- **Environment Variables**:
+  - `NODE_VERSION`: `20`
+  - `VITE_COMPRESSED`: `1`
+  - `VITE_GAME_PUBLIC`: `1`
+  - `VITE_PLAYER_SPAWN`: `landing`
+
+---
+
+## Credits & Attribution
+
+Based on the creative direction and engine architecture of Bruno Simon's Folio 2025. See [`CREDITS.md`](./CREDITS.md) for full licensing and attribution details.
