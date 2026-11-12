@@ -37,12 +37,10 @@ export class Rendering
 
     async setRenderer()
     {
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-        const hasWebGPU = !isMobile && typeof navigator !== 'undefined' && 'gpu' in navigator && !!navigator.gpu
         this.renderer = new THREE.WebGPURenderer({
             canvas: this.game.canvasElement,
             powerPreference: 'high-performance',
-            forceWebGL: !hasWebGPU,
+            forceWebGL: false,
             antialias: this.game.viewport.pixelRatio < 2
         })
 
@@ -114,14 +112,13 @@ export class Rendering
 
     setPostprocessing()
     {
-        this.postProcessingEnabled = this.game.quality.level === 0
-
         this.postProcessing = new THREE.RenderPipeline(this.renderer)
 
         const scenePass = pass(this.game.scene, this.game.view.camera)
         const scenePassColor = scenePass.getTextureNode('output')
 
         this.bloomPass = bloom(scenePassColor)
+        this.bloomPass._nMips = this.game.quality.level === 0 ? 5 : 2
         this.bloomPass.threshold.value = 1
         this.bloomPass.strength.value = 0.25
         this.bloomPass.smoothWidth.value = 1
@@ -131,13 +128,16 @@ export class Rendering
         // Quality
         const qualityChange = (level) =>
         {
-            this.postProcessingEnabled = level === 0
-
             if(level === 0)
             {
                 this.postProcessing.outputNode = this.cheapDOFPass.add(this.bloomPass)
-                this.postProcessing.needsUpdate = true
             }
+            else
+            {
+                this.postProcessing.outputNode = scenePassColor.add(this.bloomPass)
+            }
+
+            this.postProcessing.needsUpdate = true
         }
         qualityChange(this.game.quality.level)
         this.game.quality.events.on('change', qualityChange)
@@ -209,10 +209,14 @@ export class Rendering
 
     async render()
     {
-        if(this.postProcessingEnabled)
+        try
+        {
             this.postProcessing.render()
-        else
-            this.renderer.render(this.game.scene, this.game.view.camera)
+        }
+        catch(err)
+        {
+            console.warn('[Rendering] Frame error caught:', err)
+        }
 
         if(this.stats)
             this.stats.update()
