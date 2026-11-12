@@ -74,6 +74,8 @@ export class Rendering
 
     setPostprocessing()
     {
+        this.postProcessingEnabled = this.game.quality.level === 0
+
         this.postProcessing = new THREE.RenderPipeline(this.renderer)
 
         const scenePass = pass(this.game.scene, this.game.view.camera)
@@ -89,16 +91,13 @@ export class Rendering
         // Quality
         const qualityChange = (level) =>
         {
+            this.postProcessingEnabled = level === 0
+
             if(level === 0)
             {
                 this.postProcessing.outputNode = this.cheapDOFPass.add(this.bloomPass)
+                this.postProcessing.needsUpdate = true
             }
-            else if(level === 1)
-            {
-                this.postProcessing.outputNode = scenePassColor
-            }
-
-            this.postProcessing.needsUpdate = true
         }
         qualityChange(this.game.quality.level)
         this.game.quality.events.on('change', qualityChange)
@@ -170,8 +169,10 @@ export class Rendering
 
     async render()
     {
-        // this.renderer.render(this.game.scene, this.game.view.camera)
-        this.postProcessing.render()
+        if(this.postProcessingEnabled)
+            this.postProcessing.render()
+        else
+            this.renderer.render(this.game.scene, this.game.view.camera)
 
         if(this.stats)
             this.stats.update()
