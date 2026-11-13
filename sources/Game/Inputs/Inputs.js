@@ -38,8 +38,7 @@ export class Inputs
                 }
             }
         })
-        const isTouchDevice = typeof window !== 'undefined' && (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
-        this.mode = isTouchDevice ? Inputs.MODE_TOUCH : Inputs.MODE_MOUSEKEYBOARD
+        this.mode = Inputs.MODE_MOUSEKEYBOARD
 
         this.setKeyboard()
         this.setGamepad()
@@ -58,7 +57,7 @@ export class Inputs
             this.update()
         }, 0)
         
-        document.documentElement.classList.add(isTouchDevice ? 'is-mode-touch' : 'is-mode-mouse-keyboard')
+        document.documentElement.classList.add(`is-mode-mouse-keyboard`)
     }
 
     setKeyboard()

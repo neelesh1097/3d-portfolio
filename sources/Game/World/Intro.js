@@ -295,10 +295,9 @@ export class Intro
                 },
                 onComplete: () =>
                 {
-                    this.text?.mesh?.removeFromParent()
-                    this.soundButton?.mesh?.removeFromParent()
-                    if(this.soundButton?.intersect)
-                        this.game.rayCursor.removeIntersect(this.soundButton.intersect)
+                    this.text.mesh.removeFromParent()
+                    this.soundButton.mesh.removeFromParent()
+                    this.game.rayCursor.removeIntersect(this.soundButton.intersect)
                 }
             }
         )
@@ -319,29 +318,26 @@ export class Intro
         this.label.removeFromParent()
 
         // Geometries
-        this.circle?.mesh?.geometry?.dispose()
-        this.soundButton?.mesh?.geometry?.dispose()
-        this.text?.mesh?.geometry?.dispose()
+        this.circle.mesh.geometry.dispose()
+        this.soundButton.mesh.geometry.dispose()
+        this.text.mesh.geometry.dispose()
 
         // Materials
-        this.circle?.mesh?.material?.dispose()
-        this.soundButton?.mesh?.material?.dispose()
-        this.text?.mesh?.material?.dispose()
+        this.circle.mesh.material.dispose()
+        this.soundButton.mesh.material.dispose()
+        this.text.mesh.material.dispose()
 
         // Textures
-        this.game.resources?.soundTexture?.dispose()
+        this.game.resources.soundTexture.dispose()
 
-        this.text?.textures?.forEach((value, key) =>
+        this.text.textures.forEach((value, key) =>
         {
             value.dispose()
         })
         
         // Events
         this.game.ticker.events.off('tick', this.update)
-        if(this.text?.updateTexture)
-        {
-            this.game.inputs.gamepad.events.off('typeChange', this.text.updateTexture)
-            this.game.inputs.events.off('modeChange', this.text.updateTexture)
-        }
+        this.game.inputs.gamepad.events.off('typeChange', this.text.updateTexture)
+        this.game.inputs.events.off('modeChange', this.text.updateTexture)
     }
 }
