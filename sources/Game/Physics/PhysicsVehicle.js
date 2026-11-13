@@ -524,8 +524,9 @@ export class PhysicsVehicle
         this.upward.set(0, 1, 0).applyQuaternion(this.quaternion)
         this.forward.set(1, 0, 0).applyQuaternion(this.quaternion)
         // this.speed = this.controller.currentVehicleSpeed()
-        this.speed = this.velocity.length() / this.game.ticker.deltaScaled
-        this.xzSpeed = Math.hypot(this.velocity.x, this.velocity.z) / this.game.ticker.deltaScaled
+        const deltaScaled = this.game.ticker.deltaScaled || 1/60
+        this.speed = deltaScaled > 0 ? this.velocity.length() / deltaScaled : 0
+        this.xzSpeed = deltaScaled > 0 ? Math.hypot(this.velocity.x, this.velocity.z) / deltaScaled : 0
         this.forwardRatio = this.direction.dot(this.forward)
         this.goingForward = this.forwardRatio > 0.5
         this.forwardSpeed = this.speed * this.forwardRatio
