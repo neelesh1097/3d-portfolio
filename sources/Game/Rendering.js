@@ -37,10 +37,25 @@ export class Rendering
 
     async setRenderer()
     {
+        const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+        const forceWebGPU = urlParams?.has('webgpu') || (typeof location !== 'undefined' && location.hash.match(/webgpu/i))
+        const forceWebGLParam = urlParams?.has('webgl') || (typeof location !== 'undefined' && location.hash.match(/webgl/i))
+
+        const isMobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+        const isBrave = typeof navigator !== 'undefined' && (
+            (navigator.brave && typeof navigator.brave.isBrave === 'function') ||
+            (navigator.userAgent && navigator.userAgent.includes('Brave'))
+        )
+
+        // WebGPU on mobile devices and Brave is experimental / blocked by Shields / triggers device loss.
+        // Firefox already defaults to WebGL2 because navigator.gpu is absent.
+        // Defaulting mobile and Brave to WebGL2 guarantees identical smooth stability across Chrome, Brave, and Firefox.
+        const shouldForceWebGL = forceWebGLParam || (!forceWebGPU && (isMobile || isBrave))
+
         this.renderer = new THREE.WebGPURenderer({
             canvas: this.game.canvasElement,
             powerPreference: 'high-performance',
-            forceWebGL: false,
+            forceWebGL: shouldForceWebGL,
             antialias: this.game.viewport.pixelRatio < 2
         })
         this.renderer.setSize(this.game.viewport.width, this.game.viewport.height)
