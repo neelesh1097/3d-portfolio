@@ -1,76 +1,59 @@
 import * as THREE from 'three/webgpu'
 
 const text = `
-██████╗ ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ██╗███████╗                   
-██╔══██╗██╔══██╗██║   ██║████╗  ██║██╔═══██╗╚═╝██╔════╝                   
-██████╔╝██████╔╝██║   ██║██╔██╗ ██║██║   ██║   ███████╗                   
-██╔══██╗██╔══██╗██║   ██║██║╚██╗██║██║   ██║   ╚════██║                   
-██████╔╝██║  ██║╚██████╔╝██║ ╚████║╚██████╔╝   ███████║                   
-╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝    ╚══════╝                   
-                                                                       
-██████╗  ██████╗ ██████╗ ████████╗███████╗ ██████╗ ██╗     ██╗ ██████╗ 
-██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██║     ██║██╔═══██╗
-██████╔╝██║   ██║██████╔╝   ██║   █████╗  ██║   ██║██║     ██║██║   ██║
-██╔═══╝ ██║   ██║██╔══██╗   ██║   ██╔══╝  ██║   ██║██║     ██║██║   ██║
-██║     ╚██████╔╝██║  ██║   ██║   ██║     ╚██████╔╝███████╗██║╚██████╔╝
-╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝ 
+███╗   ██╗███████╗███████╗██╗     ███████╗███████╗██╗  ██╗
+████╗  ██║██╔════╝██╔════╝██║     ██╔════╝██╔════╝██║  ██║
+██╔██╗ ██║█████╗  █████╗  ██║     █████╗  ███████╗███████║
+██║╚██╗██║██╔══╝  ██╔══╝  ██║     ██╔══╝  ╚════██║██╔══██║
+██║ ╚████║███████╗███████╗███████╗███████╗███████║██║  ██║
+╚═╝  ╚═══╝╚══════╝╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+                                                          
+██╗   ██╗ █████╗ ██████╗  █████╗ ██╗   ██╗                
+╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗██║   ██║                
+ ╚████╔╝ ███████║██║  ██║███████║██║   ██║                
+  ╚██╔╝  ██╔══██║██║  ██║██╔══██║╚██╗ ██╔╝                
+   ██║   ██║  ██║██████╔╝██║  ██║ ╚████╔╝                 
+   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝  ╚═══╝                  
 
-╔═ Intro ═══════════════╗
-║ Thank you for visiting my portfolio, you sneaky developer!
-║ If you are curious about the stack and how I built this project, here’s everything you need to know.
+╔═ Profile ═════════════╗
+║ Neelesh Yadav — Full-Stack Software Developer
+║ Gurugram, Haryana, India
+║ Building scalable, workflow-driven enterprise platforms and real-time collaboration applications.
 ╚═══════════════════════╝
 
-╔═ Socials ═══════════════╗
+╔═ Socials & Contact ═══╗
 ║ Mail           ⇒ neelesh6kumar@gmail.com
+║ Phone          ⇒ +91 8810250825
 ║ GitHub         ⇒ https://github.com/neelesh1097
 ║ LinkedIn       ⇒ https://linkedin.com/in/neelesh-yadav-a5988b292
 ╚═══════════════════════╝
 
-╔═ Debug ═══════════════╗
-║ You can access the debug mode by adding #debug at the end of the URL and reloading.
-║ Press [V] to toggle the free camera.
+╔═ Technical Skills ════╗
+║ Frontend ⇒ JavaScript (ES6+), React.js, Next.js, TypeScript
+║ Backend  ⇒ Node.js, Express.js, REST APIs
+║ Database ⇒ PostgreSQL, MongoDB
+║ Tools    ⇒ Git, GitHub, Postman, VS Code, Vite
 ╚═══════════════════════╝
 
-╔═ Three.js ════════════╗
-║ Three.js is the library I’m using to render this 3D world (release: ${THREE.REVISION})
-║ https://threejs.org/
-║ It was created by mr.doob (https://x.com/mrdoob, https://github.com/mrdoob),
-║ followed by hundreds of awesome developers,
-║ one of which being Sunag (https://x.com/sea3dformat, https://github.com/sunag) who added TSL,
-║ enabling the use of both WebGL and WebGPU, making this portfolio possible.
+╔═ Experience ══════════╗
+║ TRPW Strategic Partner ⇒ Frontend Intern (Apr 2026 – Present)
+║   - Audit Management Tool (AMT) & Betel Meet real-time video conferencing.
+║ Univest                ⇒ Tech Intern (Jul 2025 – Sep 2025)
+║   - Validated user-facing features, regression scenarios & critical issue testing.
+║ Phoenix Labs           ⇒ Software Development Intern (Sep 2024 – Mar 2025)
+║   - Backend services, API integrations & data processing workflows.
 ╚═══════════════════════╝
 
-╔═ Three.js Journey ════╗
-║ If you want to learn Three.js, I got you covered with this huge course.
-║ https://threejs-journey.com/
-║ It contains everything you need to start building awesome stuff with Three.js (and much more).
+╔═ Education ═══════════╗
+║ Gurugram University (2022 – 2026)
+║ B.Tech in Artificial Intelligence — Gurugram, Haryana
 ╚═══════════════════════╝
 
-╔═ Devlogs ═════════════╗
-║ I’ve been making devlogs since the very start of this portfolio
-║ and you can find them all on my Youtube channel.
-║ https://www.youtube.com/@BrunoSimon
-╚═══════════════════════╝
-
-╔═ Source code ═════════╗
-║ The code is available on GitHub under MIT license. Even the Blender files are there, so have fun!
-║ https://github.com/brunosimon/folio-2025
-║ For security reasons, I’m not sharing the server code, but the portfolio works without it.
-╚═══════════════════════╝
-
-╔═ Musics ══════════════╗
-║ The music you hear was made especially for this portfolio by the awesome Kounine (Linktree).
-║ https://linktr.ee/Kounine
-║ They are now under CC0 license, meaning you can do whatever you want with them!
-║ Download them here.
-║ https://github.com/brunosimon/folio-2025/tree/main/static/sounds/musics
-╚═══════════════════════╝
-
-╔═ Some more links ═════╗
-║ Rapier (Physics library)  ⇒ https://rapier.rs/
-║ Howler.js (Audio library) ⇒ https://howlerjs.com/
-║ Amatic SC (Fonts)         ⇒ https://fonts.google.com/specimen/Amatic+SC
-║ Nunito (Fonts).           ⇒ https://fonts.google.com/specimen/Nunito?query=Nunito
+╔═ 3D Engine & Stack ═══╗
+║ Rendered with Three.js (${THREE.REVISION}) using TSL, WebGPU and WebGL2.
+║ Physics  ⇒ Rapier3D (Wasm)
+║ Audio    ⇒ Howler.js
+║ Source   ⇒ https://github.com/neelesh1097/3d-portfolio
 ╚═══════════════════════╝
 `
 let finalText = ''

@@ -1,14 +1,15 @@
 export default [
     {
-        title: 'Three.js Journey',
-        titleSmall: [ 'Three.js', 'Journey' ],
-        url: 'https://threejs-journey.com',
+        title: 'Audit Management Tool',
+        titleSmall: [ 'Audit', 'Tool' ],
+        url: 'https://github.com/neelesh1097',
         attributes:
         {
-            role: [ 'developer', 'formater' ],
-            with: [ 'Hervé Studio', 'Bonhomme Paris' ]
+            role: [ 'Full-Stack Developer' ],
+            at: 'TRPW Partner',
+            with: [ 'Next.js', 'PostgreSQL' ]
         },
-        distinctions: [ 'fwa' ], // 'awwwards', 'fwa', 'cssda'
+        distinctions: [ 'awwwards' ],
         images:
         [
             'threejs-journey-1.ktx',
@@ -18,34 +19,17 @@ export default [
             'threejs-journey-5.ktx',
         ]
     },
-    // {
-    //     title: 'Chartogne Taillet',
-    //     titleSmall: [ 'Chartogne', 'Taillet' ],
-    //     url: 'https://chartogne-taillet.com',
-    //     attributes:
-    //     {
-    //         at: 'Immersive Garden',
-    //         role: 'WebGL developer',
-    //         with: 'Rémi Tran'
-    //     },
-    //     distinctions: [ 'awwwards', 'cssda', 'fwa' ], // 'awwwards', 'fwa', 'cssda'
-    //     images:
-    //     [
-    //         'chartogne-taillet-1.ktx',
-    //         'chartogne-taillet-2.ktx',
-    //         'chartogne-taillet-3.ktx',
-    //     ]
-    // },
     {
-        title: 'Bonhomme | 10 ans',
-        titleSmall: [ 'Bonhomme', '10 ans' ],
-        url: 'https://anniversary.bonhommeparis.com',
+        title: 'Betel Meet',
+        titleSmall: [ 'Betel', 'Meet' ],
+        url: 'https://github.com/neelesh1097',
         attributes:
         {
-            role: 'WebGL developer',
-            with: 'Bonhomme Paris'
+            role: 'Frontend Developer',
+            at: 'TRPW Partner',
+            with: [ 'WebRTC', 'TypeScript' ]
         },
-        distinctions: [ 'awwwards', 'fwa' ],
+        distinctions: [ 'fwa' ],
         images:
         [
             'bonhomme-10-ans-1.ktx',
@@ -54,16 +38,15 @@ export default [
         ]
     },
     {
-        title: 'Madbox',
-        titleSmall: [ 'Madbox' ],
-        url: 'https://madbox.io',
+        title: 'Full-Stack MERN App',
+        titleSmall: [ 'MERN', 'App' ],
+        url: 'https://github.com/neelesh1097',
         attributes:
         {
-            role: 'WebGL developer',
-            at: 'Hervé Studio',
-            with: 'Lei Xing'
+            role: 'Full-Stack Developer',
+            with: [ 'MongoDB', 'Express', 'React' ]
         },
-        distinctions: [ 'awwwards' ],
+        distinctions: [ 'cssda' ],
         images:
         [
             'madbox-1.ktx',
@@ -72,14 +55,13 @@ export default [
         ]
     },
     {
-        title: 'Luni',
-        titleSmall: [ 'Luni' ],
-        url: 'https://www.luni.app',
+        title: 'Dynamic React Portfolio',
+        titleSmall: [ 'React', 'Portfolio' ],
+        url: 'https://github.com/neelesh1097/3d-portfolio',
         attributes:
         {
-            role: 'WebGL developer',
-            at: 'Hervé Studio',
-            with: 'Loïc Belaidremesal'
+            role: 'Frontend Developer',
+            with: [ 'React', 'Three.js', 'Vite' ]
         },
         distinctions: [ 'awwwards', 'fwa' ],
         images:
@@ -91,13 +73,13 @@ export default [
         ]
     },
     {
-        title: 'Scout',
-        titleSmall: [ 'Scout' ],
-        url: 'https://scout-omega.vercel.app',
+        title: 'Crypto Price Tracker',
+        titleSmall: [ 'Crypto', 'Tracker' ],
+        url: 'https://github.com/neelesh1097',
         attributes:
         {
-            role: 'WebGL developer',
-            at: 'Hervé Studio'
+            role: 'Frontend Developer',
+            with: [ 'React', 'Public APIs' ]
         },
         distinctions: [  ],
         images:
@@ -108,55 +90,21 @@ export default [
         ]
     },
     {
-        title: 'Prior Holdings',
-        titleSmall: [ 'Prio', 'Holdings' ],
-        url: 'https://prior.co.jp/discover/en',
+        title: 'Phoenix Labs Platform',
+        titleSmall: [ 'Phoenix', 'Labs' ],
+        url: 'https://github.com/neelesh1097',
         attributes:
         {
-            role: [ 'Front developer', 'WebGL developer' ],
-            at: 'Immersive Garden'
+            role: 'Software Intern',
+            at: 'Phoenix Labs',
+            with: [ 'Node.js', 'APIs' ]
         },
-        distinctions: [ 'awwwards', 'cssda', 'fwa' ],
+        distinctions: [ 'fwa' ],
         images:
         [
             'prior-1.ktx',
             'prior-2.ktx',
             'prior-3.ktx',
-        ]
-    },
-    {
-        title: 'Orano',
-        titleSmall:  'Orano',
-        url: 'https://www.orano.group/experience/innovation/en',
-        attributes:
-        {
-            role: [ 'Front developer', 'WebGL developer' ],
-            at: 'Immersive Garden'
-        },
-        distinctions: [ 'awwwards', 'cssda', 'fwa' ],
-        images:
-        [
-            'orano-1.ktx',
-            'orano-2.ktx',
-            'orano-3.ktx',
-        ]
-    },
-    {
-        title: 'Citrix / Redbull',
-        titleSmall: ['Citrix', 'Redbull'],
-        url: 'https://thenewmobileworkforce.imm-g-prod.com',
-        attributes:
-        {
-            role: [ 'WebGL developer' ],
-            at: 'Immersive Garden',
-            with: [ 'Damien Doussaud', 'Quentin Leclercq' ]
-        },
-        distinctions: [ 'awwwards', 'cssda', 'fwa' ],
-        images:
-        [
-            'citrix-redbull-1.ktx',
-            'citrix-redbull-2.ktx',
-            'citrix-redbull-3.ktx',
         ]
     }
 ]
